@@ -1,0 +1,46 @@
+*{
+    margin:0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+html{
+    height: 100%;
+}
+.container{
+    
+    width: 370px;
+    height: 450px;
+    margin-top: 100px;
+    padding: 2px;
+    border:0;
+    border-radius: 12px;
+    background-color:white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+   
+}
+.heading{
+    margin-top:50px ;
+    text-align: center;
+}
+.image{
+    margin:12px 12px ;
+}
+.add-request-button{
+    margin-top:50px ;
+    text-align: center;
+}
+.btn{
+    width: 100%;
+    height: 60%;
+}
+form{
+    margin-top: 1px;
+    padding: 12px;
+}
+.login-button{
+    text-align: center;
+}
+.login-heading{
+    margin-top:1px ;
+    text-align: center;
+}
