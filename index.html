@@ -18,18 +18,12 @@
         crossorigin="anonymous"></script>
     <link rel="stylesheet" href="style.css">
     <title>Document</title>
-    </head>
+</head>
 <script>
-      function myfunction(){
-         var userid=sessionStorage.getItem("user_id");
-         return ;//  alert(userid);   
-    };
-        function addRequest() {
-            alert(userid);
-            // alert(document.getElementById('userid').value);
-            // alert('hi hello');
+    function addRequest() {
+        var userid = sessionStorage.getItem("user_id");
         url = 'http://127.0.0.1:8000/api/add-request';
-        data = { "user_id":userid};
+        data = { "user_id": userid };
         params = {
             method: 'post',
             headers: {
@@ -41,33 +35,28 @@
             .then(data => console.log(data));
     }
 </script>
-<body onload="myfunction()">
+<body>
     <div class="container">
         <div class="image">
             <img src="images/simform_logo.png" class="img-fluid" alt="Responsive image">
         </div>
         <br>
         <div class="request-heading">
-        <h2>Request For Lunch</h2>
+            <h2>Request For Lunch</h2>
         </div>
         <hr>
         <div class="request-button">
-        <button class="btn btn-primary" onclick="addRequest()" style="width: 70%;">Add Request</button>
-    <input type="hidden" id="userid" value=`${userid}`>
-    </div>
-    <div class="request-button">
-        <button class="btn btn-primary" style="width: 70%;">Request with guests</button>
+            <button class="btn btn-primary" onclick="addRequest()" style="width: 70%;">Add Request</button>
         </div>
         <div class="request-button">
-        <button class="btn btn-primary" style="width: 70%;">Delete Request</button>
+            <button class="btn btn-primary" style="width: 70%;">Request with guests</button>
         </div>
         <div class="request-button">
-        <button class="btn btn-primary" style="width: 70%;">Arrive for Lunch</button>
+            <button class="btn btn-primary" style="width: 70%;">Delete Request</button>
         </div>
-
-
-        
+        <div class="request-button">
+            <button class="btn btn-primary" style="width: 70%;">Arrive for Lunch</button>
+        </div>
     </div>
 </body>
-
 </html>
