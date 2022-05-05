@@ -17,6 +17,7 @@
         integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
         crossorigin="anonymous"></script>
     <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
     <title>Document</title>
 </head>
 <script>
@@ -31,7 +32,44 @@
             },
             body: JSON.stringify(data)
         };
-        fetch(url, params).then(response => response.text())
+        fetch(url, params).then(function(response){
+            if(response.status==409){
+                alert('You already registered for Lunch');
+            }
+            else if(response.status==401){
+                alert('Something went wrong');
+            }
+            else{
+                alert('Add Request Successfully');
+                return response.json();
+            }
+        })
+           
+    }
+    function addGuest() {
+        var userid = sessionStorage.getItem("user_id");
+        var guest=window.prompt();
+        url = 'http://127.0.0.1:8000/api/add-guests';
+        data = { "user_id": userid,'guests':guest};
+        params = {
+            method: 'post',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        };
+        fetch(url, params).then(function(response){
+            if(response.status==409){
+                alert('You already registered for Lunch');
+            }
+            else if(response.status==401){
+                alert('Something went wrong');
+            }
+            else{
+                alert('Add Request Successfully');
+                return response.json();
+            }
+        })
             .then(data => console.log(data));
     }
 </script>
@@ -49,16 +87,15 @@
             <button class="btn btn-primary" onclick="addRequest()" style="width: 70%;">Add Request</button>
         </div>
         <div class="request-button">
-            <button class="btn btn-primary" style="width: 70%;" onclick="addGuests()">Request with guests</button>
+            <button class="btn btn-primary" onclick="addGuest()" style="width: 70%;">Request with guests</button>
         </div>
-        <div class="request-button">
+         <div class="request-button">
             <button class="btn btn-primary" style="width: 70%;">Delete Request</button>
         </div>
         <div class="request-button">
             <button class="btn btn-primary" style="width: 70%;">Arrive for Lunch</button>
         </div>
     </div>
-
     <div class="popup">
         <div class="popup-content">
           <a href=""><img src="images/close_button.png" class="close" alt="close"></a>
@@ -68,13 +105,17 @@
                     <h5><label class="form-label">Add Guests</label></h5>
                     <input type="number" class="form-control" id="add_guests" placeholder="Add Number of Guests here" min="0">
                 </div>
-                <button class="btn btn-primary" style="width: 70%;">Add Guests</button>
+                <button class="btn btn-primary" onclick="addGuest()" style="width: 70%;">Add Guests</button>
             </form>
 
         </div>
     </div>
 
 
+
     <script src="script.js"></script>
+</body>
+
+
 </body>
 </html>
