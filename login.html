@@ -20,6 +20,34 @@
         crossorigin="anonymous"></script>
     <link rel="stylesheet" href="style.css">
 </head>
+<script>
+    function checkLogin() {
+        url = 'http://127.0.0.1:8000/api/login';
+        data = { "email": document.getElementById('Email').value, "password": document.getElementById('Password').value };
+        params = {
+            method: 'post',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        };
+        fetch(url, params).then(function(response){
+            if(response.status==401){
+                alert('Invalid Credential');
+            }
+            else{
+                return response.json();
+            }
+        })
+            .then(function (data) {
+                
+                     sessionStorage.setItem("user_id",data.id);
+                        window.location.href="file:///home/prajaptitejas/laravel_practice/lunch_booking_frontend/index.html";
+                       
+            });
+                     
+    }
+</script>
 
 <body>
     <div class="container">
@@ -34,16 +62,15 @@
         <form>
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Email address</label>
-                <input type="email" class="form-control" name="email" id="exampleInputEmail1"
-                    aria-describedby="emailHelp" placeholder="enter email">
+                <input type="email" class="form-control" name="email" id="Email" aria-describedby="emailHelp"
+                    placeholder="enter email">
             </div>
             <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label">Password</label>
-                <input type="password" class="form-control" name="password" id="exampleInputPassword1"
-                    placeholder="enter password">
+                <input type="password" class="form-control" name="password" id="Password" placeholder="enter password">
             </div>
             <div class="login-button">
-                <button type="submit" class="btn btn-primary">Login</button>
+                <button type="button" onclick="checkLogin()" class="btn btn-primary">Login</button>
             </div>
         </form>
 
