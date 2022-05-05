@@ -35,9 +35,11 @@
         fetch(url, params).then(function(response){
             if(response.status==409){
                 alert('You already registered for Lunch');
+                location.reload();
             }
             else if(response.status==401){
                 alert('Something went wrong');
+                location.reload();
             }
             else{
                 alert('Add Request Successfully');
@@ -61,9 +63,11 @@
         fetch(url, params).then(function(response){
             if(response.status==409){
                 alert('You already registered for Lunch');
+                location.reload();
             }
             else if(response.status==401){
                 alert('Something went wrong');
+                location.reload();
             }
             else{
                 alert('Add Request Successfully');
@@ -87,7 +91,7 @@
             <button class="btn btn-primary" onclick="addRequest()" style="width: 70%;">Add Request</button>
         </div>
         <div class="request-button">
-            <button class="btn btn-primary" onclick="addGuest()" style="width: 70%;">Request with guests</button>
+            <button class="btn btn-primary" style="width: 70%;" onclick="addGuests()">Request with guests</button>
         </div>
          <div class="request-button">
             <button class="btn btn-primary" style="width: 70%;">Delete Request</button>
@@ -105,11 +109,13 @@
                     <h5><label class="form-label">Add Guests</label></h5>
                     <input type="number" class="form-control" id="add_guests" placeholder="Add Number of Guests here" min="0">
                 </div>
-                <button class="btn btn-primary" onclick="addGuest()" style="width: 70%;">Add Guests</button>
+                <button class="btn btn-primary" style="width: 70%;">Add Guests</button>
             </form>
 
         </div>
     </div>
 
+
+    <script src="script.js"></script>
 </body>
 </html>
