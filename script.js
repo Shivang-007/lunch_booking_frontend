@@ -1,5 +1,5 @@
 
-function myFunction() {
+function addGuests() {
     document.querySelector('.popup').style.display = "flex";
 };
 
