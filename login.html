@@ -31,21 +31,21 @@
             },
             body: JSON.stringify(data)
         };
-        fetch(url, params).then(function(response){
-            if(response.status==401){
+        fetch(url, params).then(function (response) {
+            if (response.status == 401) {
                 alert('Invalid Credential');
             }
-            else{
+            else {
                 return response.json();
             }
         })
             .then(function (data) {
-                
-                     sessionStorage.setItem("user_id",data.id);
-                        window.location.href="file:///home/prajaptitejas/laravel_practice/lunch_booking_frontend/index.html";
-                       
+
+                sessionStorage.setItem("user_id", data.id);
+                window.location.href = "file:///var/www/html/Lunch_booking_system_frontend/index.html";
+
             });
-                     
+
     }
 </script>
 

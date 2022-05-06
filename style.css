@@ -37,15 +37,12 @@ html {
 }
 
 .btn {
+    
     width: 100%;
     border: none;
     background-color: rgb(239, 83, 102);
     height: 60%;
-}
-
-form {
-    margin-top: 1px;
-    padding: 12px;
+    display: inline-block;
 }
 
 .login-button {
