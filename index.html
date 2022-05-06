@@ -61,10 +61,7 @@
 
     function addGuest() {
         var userid = sessionStorage.getItem("user_id");
-        // var guest = window.prompt();
         var guest = document.getElementById('add_guests').value;
-        //alert(guest);
-
         url = 'http://127.0.0.1:8000/api/add-guests';
         data = { "user_id": userid, 'guests': guest };
         params = {
@@ -78,14 +75,42 @@
             if (response.status == 409) {
                 alert('You already registered for Lunch');
                 EnableDisableButton();
-                // location.reload();
-
+            
             }
             else if (response.status == 401) {
                 alert('Something went wrong');
                 EnableDisableButton();
-                // location.reload();
-
+         
+            }
+            else {
+                alert('Add Request Successfully');
+                EnableDisableButton();
+                return response.json();
+            }
+        })
+            .then(data => console.log(data));
+    }
+    function deleteRequest() {
+        var userid = sessionStorage.getItem("user_id");
+        url = 'http://127.0.0.1:8000/api/delete-request';
+        data = { "user_id": userid};
+        params = {
+            method: 'post',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        };
+        fetch(url, params).then(function (response) {
+            if (response.status == 409) {
+                alert('You already registered for Lunch');
+                EnableDisableButton();
+            
+            }
+            else if (response.status == 401) {
+                alert('Something went wrong');
+                EnableDisableButton();
+         
             }
             else {
                 alert('Add Request Successfully');
@@ -116,7 +141,7 @@
                 guests</button>
         </div>
         <div class="request-button">
-            <button class="btn btn-primary" style="width: 70%;" id="delete_request">Delete Request</button>
+            <button class="btn btn-primary" onclick="deleteRequest()" style="width: 70%;" id="delete_request">Delete Request</button>
         </div>
         <div class="request-button">
             <button class="btn btn-primary" style="width: 70%;" id="arrive_lunch">Arrive for Lunch</button>
