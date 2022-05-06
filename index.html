@@ -41,6 +41,10 @@
                 alert('Something went wrong');
                 location.reload();
             }
+            else if(response.status==503){
+                alert('Its Holiday,Not able To Add Request');
+                location.reload();
+            }
             else{
                 alert('Add Request Successfully');
                 return response.json();

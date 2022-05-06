@@ -1,9 +1,9 @@
 
-function addGuests() {
-    document.querySelector('.popup').style.display = "flex";
-};
+// function addGuests() {
+//     document.querySelector('.popup').style.display = "flex";
+// };
 
-document.querySelector(".close").addEventListener("click", function () {
-    document.querySelector(".popup").style.display = "none";
-});
+// document.querySelector(".close").addEventListener("click", function () {
+//     document.querySelector(".popup").style.display = "none";
+// });
 
