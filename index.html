@@ -17,7 +17,7 @@
         integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
         crossorigin="anonymous"></script>
     <link rel="stylesheet" href="style.css">
-    <script src="script.js"></script>
+    
     <title>Document</title>
 </head>
 <script>
@@ -35,15 +35,15 @@
         fetch(url, params).then(function (response) {
             if (response.status == 409) {
                 alert('You already registered for Lunch');
-                EnableDisableButton();
+                disableButton();
             }
             else if (response.status == 404) {
                 alert('Something went wrong');
-                EnableDisableButton();
+                disableButton();
             }
             else {
                 alert('Add Request Successfully');
-                EnableDisableButton();
+                disableButton();
                 return response.json();
 
 
@@ -52,11 +52,17 @@
 
     }
 
-    function EnableDisableButton() {
+    function disableButton() {
         document.getElementById("add_request").style.display = "none";
         document.getElementById("guest_request").style.display = "none";
         document.getElementById("delete_request").style.display = "inline-block";
         document.getElementById("popup").style.display = "none";
+    }
+
+    function enableButton(){
+        document.getElementById("add_request").style.display = "inline-block";
+        document.getElementById("guest_request").style.display = "inline-block";
+        document.getElementById("delete_request").style.display = "none";
     }
 
     function addGuest() {
@@ -74,17 +80,17 @@
         fetch(url, params).then(function (response) {
             if (response.status == 409) {
                 alert('You already registered for Lunch');
-                EnableDisableButton();
+                disableButton();
             
             }
             else if (response.status == 401) {
                 alert('Something went wrong');
-                EnableDisableButton();
+                disableButton();
          
             }
             else {
                 alert('Add Request Successfully');
-                EnableDisableButton();
+                disableButton();
                 return response.json();
             }
         })
@@ -105,14 +111,17 @@
         fetch(url, params).then(function (response) {
             if (response.status == 503) {
                 alert('Request is not Deleted');
+                enableButton();
                
             }
             else if (response.status == 404) {
                 alert('Something went wrong');
+                enableButton();
                 
             }
             else {
                 alert('Delete Request Successfully');
+                enableButton();
                 return response.json();
             }
         })
@@ -164,7 +173,7 @@
 
 
 
-    <script async src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 
 
