@@ -91,6 +91,7 @@
             .then(data => console.log(data));
     }
     function deleteRequest() {
+      
         var userid = sessionStorage.getItem("user_id");
         url = 'http://127.0.0.1:8000/api/delete-request';
         data = { "user_id": userid};
@@ -102,19 +103,16 @@
             body: JSON.stringify(data)
         };
         fetch(url, params).then(function (response) {
-            if (response.status == 409) {
-                alert('You already registered for Lunch');
-                EnableDisableButton();
-            
+            if (response.status == 503) {
+                alert('Request is not Deleted');
+               
             }
-            else if (response.status == 401) {
+            else if (response.status == 404) {
                 alert('Something went wrong');
-                EnableDisableButton();
-         
+                
             }
             else {
-                alert('Add Request Successfully');
-                EnableDisableButton();
+                alert('Delete Request Successfully');
                 return response.json();
             }
         })
