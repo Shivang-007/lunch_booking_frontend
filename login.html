@@ -21,6 +21,13 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <script>
+       window.onload = function() {
+      if(sessionStorage.getItem("user_id")){
+        window.location.href = "file:///home/prajaptitejas/laravel_practice/lunch_booking_frontend/index.html";
+      }
+      
+        
+}
     function checkLogin() {
         url = 'http://127.0.0.1:8000/api/login';
         data = { "email": document.getElementById('Email').value, "password": document.getElementById('Password').value };
@@ -42,8 +49,7 @@
             .then(function (data) {
 
                 sessionStorage.setItem("user_id", data.id);
-                window.location.href = "file:///var/www/html/Lunch_booking_system_frontend/index.html";
-
+                window.location.href = "file:///home/prajaptitejas/laravel_practice/lunch_booking_frontend/index.html";
             });
 
     }

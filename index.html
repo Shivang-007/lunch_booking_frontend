@@ -21,6 +21,15 @@
     <title>Document</title>
 </head>
 <script>
+    window.onload = function() {
+      if(sessionStorage.getItem("user_id")){
+       
+      }
+      else{
+        window.location.href = "file:///home/prajaptitejas/laravel_practice/lunch_booking_frontend/login.html";
+      }
+        
+}
     function addRequest() {
         var userid = sessionStorage.getItem("user_id");
         url = 'http://127.0.0.1:8000/api/add-request';
@@ -36,6 +45,11 @@
             if (response.status == 409) {
                 alert('You already registered for Lunch');
                 disableButton();
+            }
+            else if (response.status == 503) {
+                alert('Its Holiday,Not able To Add Request');
+                location.reload();
+               
             }
             else if (response.status == 404) {
                 alert('Something went wrong');
@@ -83,6 +97,11 @@
                 disableButton();
             
             }
+            else if (response.status == 503) {
+                alert('Its Holiday,Not able To Add Request');
+                location.reload();
+               
+            }
             else if (response.status == 401) {
                 alert('Something went wrong');
                 disableButton();
@@ -94,7 +113,7 @@
                 return response.json();
             }
         })
-            .then(data => console.log(data));
+          
     }
     function deleteRequest() {
       
@@ -110,7 +129,7 @@
         };
         fetch(url, params).then(function (response) {
             if (response.status == 503) {
-                alert('Request is not Deleted');
+                alert('Its Holiday,Not able To Add Request');
                 enableButton();
                
             }
@@ -125,8 +144,40 @@
                 return response.json();
             }
         })
-            .then(data => console.log(data));
+            
     }
+    function logout() {
+      
+      var userid = sessionStorage.getItem("user_id");
+      url = 'http://127.0.0.1:8000/api/logout';
+      data = { "user_id": userid};
+      params = {
+          method: 'post',
+          headers: {
+              'Content-type': 'application/json'
+          },
+          body: JSON.stringify(data)
+      };
+      fetch(url, params).then(function (response) {
+          if (response.status == 200) {
+              sessionStorage.removeItem("user_id");
+              window.location.href = "file:///home/prajaptitejas/laravel_practice/lunch_booking_frontend/login.html";
+              alert('You are Successfully Logout');
+                 
+          }
+          else if (response.status == 404) {
+              alert('Something went wrong');
+              enableButton();
+              
+          }
+          else {
+              alert('Delete Request Successfully');
+              enableButton();
+              return response.json();
+          }
+      })
+        
+  }
 </script>
 
 <body>
@@ -152,6 +203,10 @@
         </div>
         <div class="request-button">
             <button class="btn btn-primary" style="width: 70%;" id="arrive_lunch">Arrive for Lunch</button>
+        </div>
+        <div class="request-button">
+            <button class="btn btn-primary" onclick="logout()" style="width: 70%;" id="add_request">Logout
+        </button>
         </div>
     </div>
     <div class="popup" id="popup">
