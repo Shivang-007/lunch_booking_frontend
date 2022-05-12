@@ -21,38 +21,32 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <script>
-       window.onload = function() {
-      if(sessionStorage.getItem("user_id")){
-        window.location.href = "file:///home/prajaptitejas/laravel_practice/lunch_booking_frontend/index.html";
-      }
-      
-        
-}
-    function checkLogin() {
-        url = 'http://127.0.0.1:8000/api/login';
-        data = { "email": document.getElementById('Email').value, "password": document.getElementById('Password').value };
-        params = {
-            method: 'post',
-            headers: {
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        };
-        fetch(url, params).then(function (response) {
-            if (response.status == 401) {
-                alert('Invalid Credential');
-            }
-            else {
-                return response.json();
-            }
-        })
-            .then(function (data) {
+    window.onload = function () {
+        if (sessionStorage.getItem("user_id")) {
+            window.location.href = "file:///var/www/html/lunch_booking_frontend/index.html";
+        }
 
-                sessionStorage.setItem("user_id", data.id);
-                window.location.href = "file:///home/prajaptitejas/laravel_practice/lunch_booking_frontend/index.html";
-            });
 
     }
+
+    function checkLogin() {
+        fetch("http://localhost:8000/api/signin", {
+
+            // Adding method type
+            method: "POST",
+            // Adding headers to the request
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        })
+
+            // Converting to JSON
+            .then(response => response.json())
+            .then(data => window.location.href = data.link)
+           
+
+    }
+
 </script>
 
 <body>
@@ -66,7 +60,7 @@
 
         <hr>
         <form>
-            <div class="mb-3">
+            <!-- <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Email address</label>
                 <input type="email" class="form-control" name="email" id="Email" aria-describedby="emailHelp"
                     placeholder="enter email">
@@ -74,9 +68,9 @@
             <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label">Password</label>
                 <input type="password" class="form-control" name="password" id="Password" placeholder="enter password">
-            </div>
+            </div> -->
             <div class="login-button">
-                <button type="button" onclick="checkLogin()" class="btn btn-primary">Login</button>
+                <button type="button" onclick="checkLogin()" class="btn btn-primary">Login Using Outlook</button>
             </div>
         </form>
 

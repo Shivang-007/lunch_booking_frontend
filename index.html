@@ -17,19 +17,55 @@
         integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
         crossorigin="anonymous"></script>
     <link rel="stylesheet" href="style.css">
-    
+
     <title>Document</title>
 </head>
 <script>
-    window.onload = function() {
-      if(sessionStorage.getItem("user_id")){
-       
-      }
-      else{
-        window.location.href = "file:///home/prajaptitejas/laravel_practice/lunch_booking_frontend/login.html";
-      }
-        
-}
+    // window.onload = function() {
+    //   if(sessionStorage.getItem("user_id")){
+
+    //   }
+    //   else{
+    //     window.location.href = "http://localhost:5500/login.html";
+    //   }
+
+    // }
+    window.onload = function () {
+
+
+        let paramString = (window.location.href).substring(
+            (window.location.href).indexOf("?code") + 1,
+            (window.location.href).lastIndexOf("&state")
+        );
+        let queryString = new URLSearchParams(paramString);
+        sessionStorage.setItem("code", queryString);
+        // sessionStorage.getItem("code").substring(5);
+
+        url = 'http://localhost:8000/api/getdata';
+        data = {
+            "code": sessionStorage.getItem("code").substring(5),
+            "grant_type": "authorization_code",
+            "tenant": "f4814d23-3835-4d87-a7dc-57a19c04684a",
+            "client_id": "adc50096-ab75-4d92-bd40-6c4c3ba9b844",
+            "client_secret": "HV48Q~a_PBWVnfROz0Oun-1B-ZdMO5fRhdvj0ciK",
+            "redirect_uri": "http://localhost:5500/index.html"
+        };
+        params = {
+            method: 'post',
+            headers: {
+                'Content-type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
+            body: JSON.stringify(data)
+        };
+        fetch(url, params).then(function(response){
+            return response.json();
+        }).then(function(data){
+            
+            console.log(data.user);
+        })
+    }
+
     function addRequest() {
         var userid = sessionStorage.getItem("user_id");
         url = 'http://127.0.0.1:8000/api/add-request';
@@ -49,7 +85,7 @@
             else if (response.status == 503) {
                 alert('Its Holiday,Not able To Add Request');
                 location.reload();
-               
+
             }
             else if (response.status == 404) {
                 alert('Something went wrong');
@@ -73,7 +109,7 @@
         document.getElementById("popup").style.display = "none";
     }
 
-    function enableButton(){
+    function enableButton() {
         document.getElementById("add_request").style.display = "inline-block";
         document.getElementById("guest_request").style.display = "inline-block";
         document.getElementById("delete_request").style.display = "none";
@@ -95,17 +131,17 @@
             if (response.status == 409) {
                 alert('You already registered for Lunch');
                 disableButton();
-            
+
             }
             else if (response.status == 503) {
                 alert('Its Holiday,Not able To Add Request');
                 location.reload();
-               
+
             }
             else if (response.status == 401) {
                 alert('Something went wrong');
                 disableButton();
-         
+
             }
             else {
                 alert('Add Request Successfully');
@@ -113,13 +149,13 @@
                 return response.json();
             }
         })
-          
+
     }
     function deleteRequest() {
-      
+
         var userid = sessionStorage.getItem("user_id");
         url = 'http://127.0.0.1:8000/api/delete-request';
-        data = { "user_id": userid};
+        data = { "user_id": userid };
         params = {
             method: 'post',
             headers: {
@@ -131,12 +167,12 @@
             if (response.status == 503) {
                 alert('Its Holiday,Not able To Add Request');
                 enableButton();
-               
+
             }
             else if (response.status == 404) {
                 alert('Something went wrong');
                 enableButton();
-                
+
             }
             else {
                 alert('Delete Request Successfully');
@@ -144,40 +180,41 @@
                 return response.json();
             }
         })
-            
+
     }
     function logout() {
-      
-      var userid = sessionStorage.getItem("user_id");
-      url = 'http://127.0.0.1:8000/api/logout';
-      data = { "user_id": userid};
-      params = {
-          method: 'post',
-          headers: {
-              'Content-type': 'application/json'
-          },
-          body: JSON.stringify(data)
-      };
-      fetch(url, params).then(function (response) {
-          if (response.status == 200) {
-              sessionStorage.removeItem("user_id");
-              window.location.href = "file:///home/prajaptitejas/laravel_practice/lunch_booking_frontend/login.html";
-              alert('You are Successfully Logout');
-                 
-          }
-          else if (response.status == 404) {
-              alert('Something went wrong');
-              enableButton();
-              
-          }
-          else {
-              alert('Delete Request Successfully');
-              enableButton();
-              return response.json();
-          }
-      })
-        
-  }
+
+        // var userid = sessionStorage.getItem("user_id");
+        url = 'http://localhost:8000/api/signout';
+        //data = { "user_id": userid};
+        params = {
+            method: 'post',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            // body: JSON.stringify(data)
+        };
+        fetch(url, params).then(function (response) {
+            if (response.status == 200) {
+                // sessionStorage.removeItem("user_id");
+
+                alert('You are Successfully Logout');
+                window.location.href = "http://localhost:5500/login.html";
+
+            }
+            else if (response.status == 404) {
+                alert('Something went wrong');
+                enableButton();
+
+            }
+            else {
+                alert('Delete Request Successfully');
+                enableButton();
+                return response.json();
+            }
+        })
+
+    }
 </script>
 
 <body>
@@ -199,14 +236,15 @@
                 guests</button>
         </div>
         <div class="request-button">
-            <button class="btn btn-primary" onclick="deleteRequest()" style="width: 70%;" id="delete_request">Delete Request</button>
+            <button class="btn btn-primary" onclick="deleteRequest()" style="width: 70%;" id="delete_request">Delete
+                Request</button>
         </div>
         <div class="request-button">
             <button class="btn btn-primary" style="width: 70%;" id="arrive_lunch">Arrive for Lunch</button>
         </div>
         <div class="request-button">
             <button class="btn btn-primary" onclick="logout()" style="width: 70%;" id="add_request">Logout
-        </button>
+            </button>
         </div>
     </div>
     <div class="popup" id="popup">
