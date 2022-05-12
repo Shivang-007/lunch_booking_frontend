@@ -21,13 +21,13 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <script>
-    window.onload = function () {
-        if (sessionStorage.getItem("user_id")) {
-            window.location.href = "file:///var/www/html/lunch_booking_frontend/index.html";
-        }
+    // window.onload = function () {
+    //     if (sessionStorage.getItem("user_id")) {
+    //         window.location.href = "http://localhost:5500/index.html";
+    //     }
 
 
-    }
+    // }
 
     function checkLogin() {
         fetch("http://localhost:8000/api/signin", {
@@ -42,7 +42,9 @@
 
             // Converting to JSON
             .then(response => response.json())
-            .then(data => window.location.href = data.link)
+            .then(function(data){
+               // alert(data.link);
+                window.location.href =data.link;})
            
 
     }
@@ -63,7 +65,7 @@
             <!-- <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Email address</label>
                 <input type="email" class="form-control" name="email" id="Email" aria-describedby="emailHelp"
-                    placeholder="enter email">
+                    placeholder="enter email" required>
             </div>
             <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label">Password</label>

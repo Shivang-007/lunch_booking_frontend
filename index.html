@@ -39,6 +39,7 @@
         );
         let queryString = new URLSearchParams(paramString);
         sessionStorage.setItem("code", queryString);
+
         // sessionStorage.getItem("code").substring(5);
 
         url = 'http://localhost:8000/api/getdata';
@@ -58,14 +59,22 @@
             },
             body: JSON.stringify(data)
         };
-        fetch(url, params).then(function(response){
+        fetch(url, params).then(function (response) {
             return response.json();
-        }).then(function(data){
-            
-            console.log(data.user);
+        }).then(function (data) {
+
+            console.log(data.user.givenName);
+            sessionStorage.setItem('name',data.user.givenName);_
+            document.getElementById("myname").innerHTML=sessionStorage.getItem('name');
         })
     }
 
+    // window.onload = function () {
+    //     if (!sessionStorage.getItem("user_id")) {
+    //         window.location.href = "http://localhost:5500/login.html";
+    //     }
+
+    // }
     function addRequest() {
         var userid = sessionStorage.getItem("user_id");
         url = 'http://127.0.0.1:8000/api/add-request';
@@ -107,6 +116,7 @@
         document.getElementById("guest_request").style.display = "none";
         document.getElementById("delete_request").style.display = "inline-block";
         document.getElementById("popup").style.display = "none";
+        document.getElementById("arrive_lunch").style.display = "inline-block";
     }
 
     function enableButton() {
@@ -182,11 +192,48 @@
         })
 
     }
+    // function logout() {
+
+    //     // var userid = sessionStorage.getItem("user_id");
+    //     url = 'http://localhost:8000/api/signout';
+    //     //data = { "user_id": userid};
+    // }
+    function arriveLunch() {
+        var userid = sessionStorage.getItem("user_id");
+        url = 'http://127.0.0.1:8000/api/lunch-taken';
+        data = { "user_id": userid };
+        params = {
+            method: 'post',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        };
+        fetch(url, params).then(function (response) {
+            if (response.status == 503) {
+                alert('Not able To Take Lunch');
+                disableButton();
+
+            }
+            else if (response.status == 404) {
+                alert('You Already Taken Lunch');
+                disableButton();
+
+            }
+            else {
+                alert('Successfully Taken Lunch');
+                enableButton();
+                return response.json();
+            }
+        })
+
+    }
+
     function logout() {
 
-        // var userid = sessionStorage.getItem("user_id");
+        var userid = sessionStorage.getItem("user_id");
         url = 'http://localhost:8000/api/signout';
-        //data = { "user_id": userid};
+        data = { "user_id": userid };
         params = {
             method: 'post',
             headers: {
@@ -200,24 +247,82 @@
 
                 alert('You are Successfully Logout');
                 window.location.href = "http://localhost:5500/login.html";
+                body: JSON.stringify(data)
+            };
+            fetch(url, params).then(function (response) {
+                if (response.status == 200) {
+                    sessionStorage.removeItem("user_id");
+                    window.location.href = "http://localhost:5500/login.html";
+                    alert('You are Successfully Logout');
 
-            }
-            else if (response.status == 404) {
-                alert('Something went wrong');
-                enableButton();
+                }
+                else if (response.status == 404) {
+                    alert('Something went wrong');
+                    enableButton();
 
-            }
-            else {
-                alert('Delete Request Successfully');
-                enableButton();
-                return response.json();
-            }
+                }
+                else {
+                    alert('Delete Request Successfully');
+                    enableButton();
+                    return response.json();
+                }
+            });
+
         })
+    }
+    function offDay() {
+
+        url = "http://127.0.0.1:8000/api/off-day";
+        fetch(url)
+            .then((response) => {
+                window.location.href = 'file:///var/www/html/Lunch_booking_system_frontend/offDay.html';
+                return response.json();
+            }).then((data) => {
+                date = '';
+                for (i = 0; i < data[0].length; i++) {
+                    date = date + data[0][i].weekend + ',';
+                }
+                sessionStorage.setItem('date', date);
+            });
 
     }
 </script>
 
 <body>
+
+    <!-- Navigation bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Lunch Booking</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page"
+                            href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="datepicker" onclick="offDay()">Off-Day</a>
+                    </li>
+                </ul>
+               
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    Welcome,
+                    <li class="nav-item" id="myname">
+                         
+                    </li>
+                    <button class="btn btn-success" onclick="logout()">Logout</button>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+
     <div class="container">
         <div class="image">
             <img src="images/simform_logo.png" class="img-fluid" alt="Responsive image">
@@ -240,11 +345,8 @@
                 Request</button>
         </div>
         <div class="request-button">
-            <button class="btn btn-primary" style="width: 70%;" id="arrive_lunch">Arrive for Lunch</button>
-        </div>
-        <div class="request-button">
-            <button class="btn btn-primary" onclick="logout()" style="width: 70%;" id="add_request">Logout
-            </button>
+            <button class="btn btn-primary" style="width: 70%;" id="arrive_lunch" onclick="arriveLunch()">Arrive for
+                Lunch</button>
         </div>
     </div>
     <div class="popup" id="popup">
