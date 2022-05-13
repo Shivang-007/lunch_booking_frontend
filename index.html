@@ -22,8 +22,7 @@
 </head>
 <script>
     // window.onload = function() {
-    //   if(sessionStorage.getItem("user_id")){
-
+    //   if(sessionStorage.getItem("mail")){
     //   }
     //   else{
     //     window.location.href = "http://localhost:5500/login.html";
@@ -39,6 +38,7 @@
         );
         let queryString = new URLSearchParams(paramString);
         sessionStorage.setItem("code", queryString);
+        // window.location.href="http://localhost:5500/index.html";
 
         // sessionStorage.getItem("code").substring(5);
 
@@ -62,23 +62,31 @@
         fetch(url, params).then(function (response) {
             return response.json();
         }).then(function (data) {
+            var name = data.user.givenName;
+            var mail = data.user.mail;
+            //console.log(data.user);
+            console.log(name);
+            console.log(mail);
 
-            console.log(data.user.givenName);
-            sessionStorage.setItem('name',data.user.givenName);_
-            document.getElementById("myname").innerHTML=sessionStorage.getItem('name');
+            //localStorage.setItem('name',name);
+            window.sessionStorage.setItem('mail', mail);
+            window.sessionStorage.setItem('name', name);
+
+            //  document.getElementById("myname").innerHTML= window.sessionStorage.getItem('name');
+            window.location.href = 'http://localhost:5500/index.html';
         })
-    }
+    };
 
     // window.onload = function () {
-    //     if (!sessionStorage.getItem("user_id")) {
+    //     if (!sessionStorage.getItem("mail")) {
     //         window.location.href = "http://localhost:5500/login.html";
     //     }
 
     // }
     function addRequest() {
-        var userid = sessionStorage.getItem("user_id");
+        var mail = window.sessionStorage.getItem("mail");
         url = 'http://127.0.0.1:8000/api/add-request';
-        data = { "user_id": userid };
+        data = { "mail": mail };
         params = {
             method: 'post',
             headers: {
@@ -89,7 +97,7 @@
         fetch(url, params).then(function (response) {
             if (response.status == 409) {
                 alert('You already registered for Lunch');
-                disableButton();
+                location.reload();
             }
             else if (response.status == 503) {
                 alert('Its Holiday,Not able To Add Request');
@@ -98,11 +106,16 @@
             }
             else if (response.status == 404) {
                 alert('Something went wrong');
-                disableButton();
+                location.reload();
             }
             else {
                 alert('Add Request Successfully');
-                disableButton();
+                // setTimeout(function () {
+
+                //     document.getElementById("arrive_lunch").style.display = "inline-block";
+
+                // }, 180000);
+                location.reload();
                 return response.json();
 
 
@@ -111,25 +124,12 @@
 
     }
 
-    function disableButton() {
-        document.getElementById("add_request").style.display = "none";
-        document.getElementById("guest_request").style.display = "none";
-        document.getElementById("delete_request").style.display = "inline-block";
-        document.getElementById("popup").style.display = "none";
-        document.getElementById("arrive_lunch").style.display = "inline-block";
-    }
-
-    function enableButton() {
-        document.getElementById("add_request").style.display = "inline-block";
-        document.getElementById("guest_request").style.display = "inline-block";
-        document.getElementById("delete_request").style.display = "none";
-    }
 
     function addGuest() {
-        var userid = sessionStorage.getItem("user_id");
+        var mail = sessionStorage.getItem("mail");
         var guest = document.getElementById('add_guests').value;
         url = 'http://127.0.0.1:8000/api/add-guests';
-        data = { "user_id": userid, 'guests': guest };
+        data = { "mail": mail, 'guests': guest };
         params = {
             method: 'post',
             headers: {
@@ -140,7 +140,7 @@
         fetch(url, params).then(function (response) {
             if (response.status == 409) {
                 alert('You already registered for Lunch');
-                disableButton();
+                location.reload();
 
             }
             else if (response.status == 503) {
@@ -150,12 +150,12 @@
             }
             else if (response.status == 401) {
                 alert('Something went wrong');
-                disableButton();
+                location.reload();
 
             }
             else {
                 alert('Add Request Successfully');
-                disableButton();
+                location.reload();
                 return response.json();
             }
         })
@@ -163,30 +163,31 @@
     }
     function deleteRequest() {
 
-        var userid = sessionStorage.getItem("user_id");
+        var mail = sessionStorage.getItem("mail");
         url = 'http://127.0.0.1:8000/api/delete-request';
-        data = { "user_id": userid };
+        data = { "mail": mail };
         params = {
             method: 'post',
             headers: {
                 'Content-type': 'application/json'
+
             },
             body: JSON.stringify(data)
         };
         fetch(url, params).then(function (response) {
             if (response.status == 503) {
                 alert('Its Holiday,Not able To Add Request');
-                enableButton();
+                location.reload();
 
             }
             else if (response.status == 404) {
-                alert('Something went wrong');
-                enableButton();
+                alert('You are not registered for lunch');
+                location.reload();
 
             }
             else {
                 alert('Delete Request Successfully');
-                enableButton();
+                location.reload();
                 return response.json();
             }
         })
@@ -199,9 +200,9 @@
     //     //data = { "user_id": userid};
     // }
     function arriveLunch() {
-        var userid = sessionStorage.getItem("user_id");
+        var mail = sessionStorage.getItem("mail");
         url = 'http://127.0.0.1:8000/api/lunch-taken';
-        data = { "user_id": userid };
+        data = { "mail": mail };
         params = {
             method: 'post',
             headers: {
@@ -212,17 +213,17 @@
         fetch(url, params).then(function (response) {
             if (response.status == 503) {
                 alert('Not able To Take Lunch');
-                disableButton();
+                location.reload();
 
             }
             else if (response.status == 404) {
                 alert('You Already Taken Lunch');
-                disableButton();
+                location.reload();
 
             }
             else {
                 alert('Successfully Taken Lunch');
-                enableButton();
+                location.reload();
                 return response.json();
             }
         })
@@ -231,9 +232,47 @@
 
     function logout() {
 
-        var userid = sessionStorage.getItem("user_id");
+        var mail = sessionStorage.getItem("mail");
+        // alert(mail);
         url = 'http://localhost:8000/api/signout';
-        data = { "user_id": userid };
+        data = { "mail": mail };
+
+        params = {
+            method: 'post',
+            headers: {
+                'Content-type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
+            body: JSON.stringify(data)
+        };
+
+        fetch(url, params).then(function (response) {
+            if (response.status == 200) {
+                sessionStorage.removeItem("mail");
+                sessionStorage.removeItem("name");
+                window.location.href = "http://localhost:5500/login.html";
+                alert('You are Successfully Logout');
+
+            }
+            else if (response.status == 404) {
+                alert('Something went wrong');
+                //enableButton();
+
+            }
+            else {
+                alert('Delete Request Successfully');
+                //enableButton();
+                return response.json();
+            }
+        });
+
+
+    }
+    function offDay() {
+
+        var mail = sessionStorage.getItem("mail");
+        url = 'http://127.0.0.1:8000/api/off-day';
+        data = { "mail": mail };
         params = {
             method: 'post',
             headers: {
@@ -241,41 +280,9 @@
             },
             // body: JSON.stringify(data)
         };
-        fetch(url, params).then(function (response) {
-            if (response.status == 200) {
-                // sessionStorage.removeItem("user_id");
-
-                alert('You are Successfully Logout');
-                window.location.href = "http://localhost:5500/login.html";
-                body: JSON.stringify(data)
-            };
-            fetch(url, params).then(function (response) {
-                if (response.status == 200) {
-                    sessionStorage.removeItem("user_id");
-                    window.location.href = "http://localhost:5500/login.html";
-                    alert('You are Successfully Logout');
-
-                }
-                else if (response.status == 404) {
-                    alert('Something went wrong');
-                    enableButton();
-
-                }
-                else {
-                    alert('Delete Request Successfully');
-                    enableButton();
-                    return response.json();
-                }
-            });
-
-        })
-    }
-    function offDay() {
-
-        url = "http://127.0.0.1:8000/api/off-day";
         fetch(url)
             .then((response) => {
-                window.location.href = 'file:///var/www/html/Lunch_booking_system_frontend/offDay.html';
+                window.location.href = 'http://localhost:5500/offDay.html';
                 return response.json();
             }).then((data) => {
                 date = '';
@@ -302,18 +309,17 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page"
-                            href="#">Home</a>
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#" id="datepicker" onclick="offDay()">Off-Day</a>
                     </li>
                 </ul>
-               
+
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     Welcome,
                     <li class="nav-item" id="myname">
-                         
+                        <script>document.write(window.sessionStorage.getItem('name'));</script>
                     </li>
                     <button class="btn btn-success" onclick="logout()">Logout</button>
                 </ul>

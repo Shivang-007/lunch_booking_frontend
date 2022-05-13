@@ -2,8 +2,8 @@
 
 
 
-document. getElementById("delete_request").style.display = "none";
-document. getElementById("arrive_lunch").style.display = "none";
+// document. getElementById("delete_request").style.display = "none";
+// document. getElementById("arrive_lunch").style.display = "none";
 
 function openGuest() {
     document.querySelector('.popup').style.display = "flex";
