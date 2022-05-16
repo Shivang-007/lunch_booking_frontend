@@ -7,6 +7,9 @@
 html {
     height: 100%;
 }
+body{
+   background-color:rgb(247, 243, 243) ;
+}
 
 .container {
 
@@ -88,4 +91,9 @@ html {
     border-radius: 50%;
     box-shadow: 6px 6px 29px -4px rgba(0,0,0,0.75);
     cursor: pointer;
+}
+.datepicker td,th{
+    text-align: center;
+    padding: 8px 12px;
+    font-size: 14px;
 }
