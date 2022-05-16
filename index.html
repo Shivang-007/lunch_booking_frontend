@@ -30,7 +30,18 @@
 
     // }
     window.onload = function () {
-
+        
+        // const d = new Date();
+        // hour = d.getHours();
+        // minutes = d.getMinutes();
+        // if(hour>=12 && hour<14 && minutes<=30)
+        // {
+        //     document.getElementById("arrive_lunch").disabled = false;
+        // }
+        // if(hour>=21 && hour<2 && minutes>=30 )
+        // {
+        //     document.getElementById("add_request").disabled = true;
+        // }
 
         let paramString = (window.location.href).substring(
             (window.location.href).indexOf("?code") + 1,
@@ -110,18 +121,12 @@
             }
             else {
                 alert('Add Request Successfully');
-                // setTimeout(function () {
-
-                //     document.getElementById("arrive_lunch").style.display = "inline-block";
-
-                // }, 180000);
-                location.reload();
+                 location.reload();
                 return response.json();
 
 
             }
         })
-
     }
 
 
@@ -269,8 +274,9 @@
 
     }
     function offDay() {
-
+        
         var mail = sessionStorage.getItem("mail");
+        // alert(mail);
         url = 'http://127.0.0.1:8000/api/off-day';
         data = { "mail": mail };
         params = {
@@ -278,17 +284,22 @@
             headers: {
                 'Content-type': 'application/json'
             },
-            // body: JSON.stringify(data)
+             body: JSON.stringify(data)
         };
-        fetch(url)
+        fetch(url,params)
             .then((response) => {
                 window.location.href = 'http://localhost:5500/offDay.html';
                 return response.json();
+              
+              
             }).then((data) => {
+               // console.log(data);
                 date = '';
                 for (i = 0; i < data[0].length; i++) {
                     date = date + data[0][i].weekend + ',';
                 }
+            //    alert(date);
+            //     console.log(date);
                 sessionStorage.setItem('date', date);
             });
 
@@ -312,14 +323,14 @@
                         <a class="nav-link active" aria-current="page" href="#">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" id="datepicker" onclick="offDay()">Off-Day</a>
+                        <a class="nav-link" onclick="offDay()" style="cursor:pointer;">Off-Day</a>
                     </li>
                 </ul>
 
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    Welcome,
-                    <li class="nav-item" id="myname">
-                        <script>document.write(window.sessionStorage.getItem('name'));</script>
+
+                    <li class="nav-item mt-1 me-1" id="myname">
+                        Welcome,<script>document.write(window.sessionStorage.getItem('name'));</script>
                     </li>
                     <button class="btn btn-success" onclick="logout()">Logout</button>
                 </ul>
@@ -329,7 +340,7 @@
 
 
 
-    
+
     <div class="container">
         <div class="image">
             <img src="images/simform_logo.png" class="img-fluid" alt="Responsive image">
@@ -352,7 +363,7 @@
                 Request</button>
         </div>
         <div class="request-button">
-            <button class="btn btn-primary" style="width: 70%;" id="arrive_lunch" onclick="arriveLunch()">Arrive for
+            <button class="btn btn-primary"  style="width: 70%;" id="arrive_lunch" onclick="arriveLunch()">Arrive for
                 Lunch</button>
         </div>
     </div>
