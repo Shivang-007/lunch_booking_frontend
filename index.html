@@ -363,7 +363,9 @@
             <div class="mb-3">
                 <h5><label class="form-label">Add Guests</label></h5>
                 <input type="number" class="form-control" id="add_guests" name="guest_number"
-                    placeholder="Add Number of Guests here" min="0">
+                    placeholder="Add Number of Guests here" oninput="this.value = 
+                    !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null">
+
             </div>
             <div>
                 <button class="btn btn-primary" onclick="addGuest()" style="width: 70%;height: 50px;">Add
