@@ -21,16 +21,9 @@
     <title>Document</title>
 </head>
 <script>
-    // window.onload = function() {
-    //   if(sessionStorage.getItem("mail")){
-    //   }
-    //   else{
-    //     window.location.href = "http://localhost:5500/login.html";
-    //   }
 
-    // }
+
     window.onload = function () {
-
 
         let paramString = (window.location.href).substring(
             (window.location.href).indexOf("?code") + 1,
@@ -38,9 +31,7 @@
         );
         let queryString = new URLSearchParams(paramString);
         sessionStorage.setItem("code", queryString);
-        // window.location.href="http://localhost:5500/index.html";
 
-        // sessionStorage.getItem("code").substring(5);
 
         url = 'http://localhost:8000/api/getdata';
         data = {
@@ -62,27 +53,84 @@
         fetch(url, params).then(function (response) {
             return response.json();
         }).then(function (data) {
+
             var name = data.user.givenName;
             var mail = data.user.mail;
-            //console.log(data.user);
-            console.log(name);
-            console.log(mail);
 
-            //localStorage.setItem('name',name);
             window.sessionStorage.setItem('mail', mail);
             window.sessionStorage.setItem('name', name);
 
-            //  document.getElementById("myname").innerHTML= window.sessionStorage.getItem('name');
             window.location.href = 'http://localhost:5500/index.html';
         })
-    };
+        const d = new Date();
+        let h = d.getHours();
+        let m = d.getMinutes();
+        if (h > 12 && h < 15) {
+            if ((h == 12 && m >= 30) || h == 13) {
+                document.getElementById('arrive_lunch').disabled = false;
+            }
+            else if (m <= 30 && h == 14) {
+                document.getElementById('arrive_lunch').disabled = false;
+            }
 
-    // window.onload = function () {
-    //     if (!sessionStorage.getItem("mail")) {
-    //         window.location.href = "http://localhost:5500/login.html";
-    //     }
 
-    // }
+            else {
+                document.getElementById('arrive_lunch').disabled = true;
+            }
+        }
+
+        const date = new Date();
+        let hour = date.getHours();
+        let minutes = date.getMinutes();
+
+        if (hour >= 14  && hour <= 21) {
+
+            document.getElementById('add_request').disabled = false;
+        }
+        else {
+            document.getElementById('add_request').disabled = true;
+        }
+
+
+
+        var disdate = sessionStorage.getItem('date');
+        dateArray = disdate.split(",");
+        var dd = new Date(),
+            month = '' + (dd.getMonth() + 1),
+            day = '' + dd.getDate(),
+            year = dd.getFullYear();
+
+        if (month.length < 2) {
+            month = '0' + month;
+        }
+        if (day.length < 2) {
+
+            day = '0' + day;
+        }
+
+        var formatDate = [year, month, day].join('-');
+
+        const myArrayy = disdate.split(",");
+        // alert(myArrayy);
+        for (var i = 0; i <= myArrayy.length; i++) {
+
+            if (myArrayy[i] == formatDate) {
+
+
+                // alert("hi");
+                // alert('Sorry, Lunch Services is not available for following date ' + formatDate)
+
+                document.getElementById('arrive_lunch').disabled = true;
+            }
+            //document.getElementById('add_request').disabled = true;
+        }
+
+    }
+
+
+
+
+
     function addRequest() {
         var mail = window.sessionStorage.getItem("mail");
         url = 'http://127.0.0.1:8000/api/add-request';
@@ -110,11 +158,7 @@
             }
             else {
                 alert('Add Request Successfully');
-                // setTimeout(function () {
 
-                //     document.getElementById("arrive_lunch").style.display = "inline-block";
-
-                // }, 180000);
                 location.reload();
                 return response.json();
 
@@ -193,13 +237,10 @@
         })
 
     }
-    // function logout() {
 
-    //     // var userid = sessionStorage.getItem("user_id");
-    //     url = 'http://localhost:8000/api/signout';
-    //     //data = { "user_id": userid};
-    // }
     function arriveLunch() {
+
+
         var mail = sessionStorage.getItem("mail");
         url = 'http://127.0.0.1:8000/api/lunch-taken';
         data = { "mail": mail };
@@ -224,9 +265,12 @@
             else {
                 alert('Successfully Taken Lunch');
                 location.reload();
+                // this.disabled = true;
                 return response.json();
             }
         })
+
+        console.log('hi');
 
     }
 
@@ -271,6 +315,7 @@
     function offDay() {
 
         var mail = sessionStorage.getItem("mail");
+
         url = 'http://127.0.0.1:8000/api/off-day';
         data = { "mail": mail };
         params = {
@@ -278,17 +323,23 @@
             headers: {
                 'Content-type': 'application/json'
             },
-            // body: JSON.stringify(data)
+            body: JSON.stringify(data)
         };
-        fetch(url)
+        fetch(url, params)
             .then((response) => {
+
+
                 window.location.href = 'http://localhost:5500/offDay.html';
                 return response.json();
+
             }).then((data) => {
+                ///    console.log('hello');
                 date = '';
                 for (i = 0; i < data[0].length; i++) {
                     date = date + data[0][i].weekend + ',';
                 }
+                //alert(date);
+                //     console.log(date);
                 sessionStorage.setItem('date', date);
             });
 
@@ -312,7 +363,8 @@
                         <a class="nav-link active" aria-current="page" href="#">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" id="datepicker" onclick="offDay()">Off-Day</a>
+                        <a class="nav-link" style="cursor: pointer;" onclick="offDay()">Off-Day</a>
+
                     </li>
                 </ul>
 
@@ -329,7 +381,7 @@
 
 
 
-    
+
     <div class="container">
         <div class="image">
             <img src="images/simform_logo.png" class="img-fluid" alt="Responsive image">
@@ -340,7 +392,7 @@
         </div>
         <hr>
         <div class="request-button">
-            <button class="btn btn-primary" onclick="addRequest()" style="width: 70%;" id="add_request">Add
+            <button class="btn btn-primary" disabled onclick="addRequest()" style="width: 70%;" id="add_request">Add
                 Request</button>
         </div>
         <div class="request-button">
@@ -352,8 +404,11 @@
                 Request</button>
         </div>
         <div class="request-button">
-            <button class="btn btn-primary" style="width: 70%;" id="arrive_lunch" onclick="arriveLunch()">Arrive for
+            <button class="btn btn-primary" disabled style="width: 70%;" id="arrive_lunch"
+                onclick="arriveLunch()">Arrive for
                 Lunch</button>
+
+
         </div>
     </div>
     <div class="popup" id="popup">

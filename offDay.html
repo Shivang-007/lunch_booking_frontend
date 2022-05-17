@@ -20,45 +20,77 @@
     <title>Document</title>
 </head>
 <script>
-    
+
     function logout() {
 
-var mail = sessionStorage.getItem("mail");
-// alert(mail);
-url = 'http://localhost:8000/api/signout';
-data = { "mail": mail };
+        var mail = sessionStorage.getItem("mail");
+        // alert(mail);
+        url = 'http://localhost:8000/api/signout';
+        data = { "mail": mail };
 
-params = {
-    method: 'post',
-    headers: {
-        'Content-type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-    },
-    body: JSON.stringify(data)
-};
+        params = {
+            method: 'post',
+            headers: {
+                'Content-type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
+            body: JSON.stringify(data)
+        };
 
-    fetch(url, params).then(function (response) {
-        if (response.status == 200) {
-            sessionStorage.removeItem("mail");
-            sessionStorage.removeItem("name");
-            window.location.href = "http://localhost:5500/login.html";
-            alert('You are Successfully Logout');
+        fetch(url, params).then(function (response) {
+            if (response.status == 200) {
+                sessionStorage.removeItem("mail");
+                sessionStorage.removeItem("name");
+                window.location.href = "http://localhost:5500/login.html";
+                alert('You are Successfully Logout');
 
-        }
-        else if (response.status == 404) {
-            alert('Something went wrong');
-            //enableButton();
+            }
+            else if (response.status == 404) {
+                alert('Something went wrong');
+                //enableButton();
 
-        }
-        else {
-            alert('Delete Request Successfully');
-            //enableButton();
-            return response.json();
-        }
-    });
+            }
+            else {
+                alert('Delete Request Successfully');
+                //enableButton();
+                return response.json();
+            }
+        });
 
 
-}
+    }
+    function offDay() {
+
+        var mail = sessionStorage.getItem("mail");
+
+        url = 'http://127.0.0.1:8000/api/off-day';
+        data = { "mail": mail };
+        params = {
+            method: 'post',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        };
+        fetch(url, params)
+            .then((response) => {
+
+                return response.json();
+                window.location.href = 'http://localhost:5500/offDay.html';
+              
+            }).then((data) => {
+                ///    console.log('hello');
+                date = '';
+                for (i = 0; i < data[0].length; i++) {
+                    date = date + data[0][i].weekend + ',';
+                }
+                 //alert(date);
+                //     console.log(date);
+                sessionStorage.setItem('date', date);
+            });
+
+    }
+  
 </script>
 
 <body>
@@ -76,7 +108,7 @@ params = {
                         <a class="nav-link active" aria-current="page" href="http://localhost:5500/index.html">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" id="datepicker" onclick="offDay()">Off-Day</a>
+                        <a class="nav-link" onclick="offDay()">Off-Day</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
