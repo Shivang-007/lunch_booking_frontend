@@ -21,13 +21,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <script>
-    // window.onload = function () {
-    //     if (sessionStorage.getItem("user_id")) {
-    //         window.location.href = "http://localhost:5500/index.html";
-    //     }
-
-
-    // }
+  
 
     function checkLogin() {
         fetch("http://localhost:8000/api/signin", {
@@ -53,18 +47,19 @@
 </script>
 
 <body>
-    <div class="container">
+    <div class="login-container mx-auto">
         <div class="image">
             <img src="images/simform_logo.png" class="img-fluid" alt="Responsive image">
         </div>
         <br>
 
-        <h2 class="login-heading">Login</h2>
+        <h2 class="login-heading">Login Using Outlook</h2>
 
         <hr>
         <form>
-            <div class="login-button">
-                <button type="button" onclick="checkLogin()" class="btn btn-primary">Login Using Outlook</button>
+            <div class="login-button" >
+                
+                <button type="button" id="login-btn"  onclick="checkLogin()" class="btn btn-primary"><img src="images/outlook_dark.png" alt="outlook" style="float: left;" width="25px" height="22px">Login Using Outlook</button>
             </div>
         </form>
 
