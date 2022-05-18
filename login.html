@@ -21,13 +21,6 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <script>
-    // window.onload = function () {
-    //     if (sessionStorage.getItem("user_id")) {
-    //         window.location.href = "http://localhost:5500/index.html";
-    //     }
-
-
-    // }
 
     function checkLogin() {
         fetch("http://localhost:8000/api/signin", {
@@ -42,11 +35,11 @@
 
             // Converting to JSON
             .then(response => response.json())
-            .then(function(data){
-              
-                window.location.href =data.link;
+            .then(function (data) {
+
+                window.location.href = data.link;
             });
-           
+
 
     }
 
@@ -64,8 +57,10 @@
         <hr>
         <form>
             <div class="login-button">
-                
-                <button type="button" onclick="checkLogin()" id="login-btn" class="btn btn-primary"><img src="images/outlook_dark.png" alt="outlook" style="float: left;" width="25px" height="22px">Login Using Outlook</button>
+
+                <button type="button" onclick="checkLogin()" id="login-btn" class="btn btn-primary"><img
+                        src="images/outlook_dark.png" alt="outlook" style="float: left;" width="25px"
+                        height="22px">Login Using Outlook</button>
             </div>
         </form>
 
