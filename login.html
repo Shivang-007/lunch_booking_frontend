@@ -36,11 +36,11 @@
 
             // Converting to JSON
             .then(response => response.json())
-            .then(function(data){
-              
-                window.location.href =data.link;
+            .then(function (data) {
+
+                window.location.href = data.link;
             });
-           
+
 
     }
 
@@ -57,9 +57,11 @@
 
         <hr>
         <form>
-            <div class="login-button" >
-                
-                <button type="button" id="login-btn"  onclick="checkLogin()" class="btn btn-primary"><img src="images/outlook_dark.png" alt="outlook" style="float: left;" width="25px" height="22px">Login Using Outlook</button>
+            <div class="login-button">
+
+                <button type="button" onclick="checkLogin()" id="login-btn" class="btn btn-primary"><img
+                        src="images/outlook_dark.png" alt="outlook" style="float: left;" width="25px"
+                        height="22px">Login Using Outlook</button>
             </div>
         </form>
 
