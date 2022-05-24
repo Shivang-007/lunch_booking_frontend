@@ -2,10 +2,10 @@
 
 function logout() {
 
-    var mail = sessionStorage.getItem("mail");
+    var user_id = sessionStorage.getItem("user_id");
     var token = sessionStorage.getItem("token");
     url = 'http://127.0.0.1:8000/api/off-day';
-    data = { "mail": mail, "token": token };
+    data = { "user_id": user_id, "token": token };
 
     params = {
         method: 'post',
@@ -18,29 +18,25 @@ function logout() {
 
     fetch(url, params).then(function (response) {
         if (response.status == 200) {
-            sessionStorage.removeItem("mail");
+            sessionStorage.removeItem("user_id");
             sessionStorage.removeItem("name");
-            window.location.href = "http://localhost:5500/login.html";
             alert('You are Successfully Logout');
-
+            window.location.href = "http://localhost/lunch_booking_system/login.html";
         }
         else if (response.status == 404) {
             alert('Something went wrong');
-
         }
     });
-
-
 }
 
   
 
 function offDay() {
 
-    var mail = sessionStorage.getItem("mail");
+    var user_id = sessionStorage.getItem("user_id");
     var token = sessionStorage.getItem("token");
     url = 'http://127.0.0.1:8000/api/off-day';
-    data = { "mail": mail, "token": token };
+    data = { "user_id": user_id, "token": token };
     params = {
         method: 'post',
         headers: {
@@ -63,9 +59,7 @@ function offDay() {
             for (i = 0; i < data.length; i++) {
                 weekend_date = weekend_date + data[i].weekend + ',';
             }
-          
             localStorage.setItem('date', weekend_date);
-
         })
 }
 
@@ -73,11 +67,11 @@ function offDay() {
 
 function arriveLunch() {
 
-    var mail = window.sessionStorage.getItem("mail");
+    var user_id = sessionStorage.getItem("user_id");
     var token = window.sessionStorage.getItem("token");
 
     url = 'http://127.0.0.1:8000/api/lunch-taken';
-    data = { "mail": mail, "token": token };
+    data = { "user_id": user_id, "token": token };
     params = {
         method: 'post',
         headers: {
@@ -89,11 +83,6 @@ function arriveLunch() {
         if (response.status == 409) {
             alert('You already registered for Lunch');
             location.reload();
-        }
-        else if (response.status == 503) {
-            alert('Its Holiday, Not able To Add Request');
-            location.reload();
-
         }
         else if (response.status == 404) {
             alert('Something went wrong');
@@ -138,7 +127,6 @@ function disable_arrive_button()
             }
         }
    }
-
 
    function  enable_arrive_button(){
     const t = new Date();

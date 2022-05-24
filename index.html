@@ -33,7 +33,6 @@
 
         let queryString = new URLSearchParams(paramString);
         sessionStorage.setItem("code", queryString);
-
         url = 'http://localhost:8000/api/getdata';
 
         data = {
@@ -42,7 +41,7 @@
             "tenant": "f4814d23-3835-4d87-a7dc-57a19c04684a",
             "client_id": "adc50096-ab75-4d92-bd40-6c4c3ba9b844",
             "client_secret": "HV48Q~a_PBWVnfROz0Oun-1B-ZdMO5fRhdvj0ciK",
-            "redirect_uri": "http://localhost:5500/index.html"
+            "redirect_uri": "http://localhost/lunch_booking_system/index.html"
         };
         params = {
             method: 'post',
@@ -55,22 +54,28 @@
         fetch(url, params).then(function (response) {
 
             return response.json();
+
         }).then(function (data) {
 
             var name = data.user.name;
-            var mail = data.user.email;
+            var user_id = data.user.id;
+            var mail = data.user.mail;
+
             var token = data.user.remember_token;
             window.sessionStorage.setItem('mail', mail);
+            window.sessionStorage.setItem('user_id', user_id);
+            // alert(window.sessionStorage.getItem('user_id'));
             window.sessionStorage.setItem('token', token);
             window.sessionStorage.setItem('name', name);
-            window.location.href = "http://localhost:5500/index.html";
+            window.location.href = "http://localhost/lunch_booking_system/index.html";
 
         });
-
-        var mail = window.sessionStorage.getItem("mail");
+       
+        // var mail = window.sessionStorage.getItem("mail");
+        var user_id = window.sessionStorage.getItem("user_id");
         var token = window.sessionStorage.getItem("token");
         url = 'http://127.0.0.1:8000/api/off-day';
-        data = { "mail": mail, "token": token };
+        data = { "user_id": user_id, "token": token };
         params = {
             method: 'post',
             headers: {
@@ -179,7 +184,7 @@
             </div>
         </div>
     </div>
-    </div> -->
+    </div>  -->
 </body>
 
 </html>
