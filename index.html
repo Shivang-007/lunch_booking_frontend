@@ -20,34 +20,11 @@
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@5.11.0/main.min.js"></script>
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
-    <title>Document</title>
+    <title>Lunch Booking</title>
 </head>
 <script>
+
     window.onload = function () {
-
-        const t = new Date();
-        h = t.getHours();
-        m = t.getMinutes();
-        if (h >= 12 && h < 15) {
-            if ((h == 12 && m >= 30) || h == 13) {
-                document.getElementById('arrive_lunch').disabled = false;
-            }
-            else if (m <= 30 && h == 14) {
-                document.getElementById('arrive_lunch').disabled = false;
-            }
-            else {
-                document.getElementById('arrive_lunch').disabled = true;
-            }
-        }
-        if ((h > 14 && m == 30) && (h < 21)) {
-            document.getElementById('guest_request').disabled = false;
-            document.getElementById('add_request').disabled = false;
-        }
-        else {
-            document.getElementById('add_request').disabled = true;
-            document.getElementById('guest_request').disabled = true;
-
-        }
 
         let paramString = (window.location.href).substring(
             (window.location.href).indexOf("?code") + 1,
@@ -56,6 +33,7 @@
 
         let queryString = new URLSearchParams(paramString);
         sessionStorage.setItem("code", queryString);
+
         url = 'http://localhost:8000/api/getdata';
 
         data = {
@@ -75,217 +53,50 @@
             body: JSON.stringify(data)
         };
         fetch(url, params).then(function (response) {
+
             return response.json();
-
         }).then(function (data) {
-            var name = data.user.givenName;
-            var mail = data.user.mail;
-            console.log(name);
-            console.log(mail);
+
+            var name = data.user.name;
+            var mail = data.user.email;
+            var token = data.user.remember_token;
             window.sessionStorage.setItem('mail', mail);
+            window.sessionStorage.setItem('token', token);
             window.sessionStorage.setItem('name', name);
-            window.location.href = 'http://localhost:5500/index.html';
-        })
+            window.location.href = "http://localhost:5500/index.html";
 
-        dateString = sessionStorage.getItem('date');
-
-        var d = new Date(),
-            month = '' + (d.getMonth() + 1),
-            day = '' + d.getDate(),
-            year = d.getFullYear();
-
-        if (month.length < 2) {
-            month = '0' + month;
-        }
-        if (day.length < 2) {
-            day = '0' + day;
-        }
-        formatDate = [year, month, day].join('-');
-        dateArray = dateString.split(",");
-        for (var i = 0; i < dateArray.length; i++) {
-            if (dateArray[i] == formatDate) {
-
-                document.getElementById("arrive_lunch").disabled = true;
-            }
-        }
-
-
-    };
-
-    function addRequest() {
-        var mail = window.sessionStorage.getItem("mail");
-        url = 'http://127.0.0.1:8000/api/add-request';
-        data = { "mail": mail };
-        params = {
-            method: 'post',
-            headers: {
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        };
-        fetch(url, params).then(function (response) {
-            if (response.status == 409) {
-                alert('You already registered for Lunch');
-                location.reload();
-            }
-            else if (response.status == 503) {
-                alert('Its Holiday,Not able To Add Request');
-                location.reload();
-
-            }
-            else if (response.status == 404) {
-                alert('Something went wrong');
-                location.reload();
-            }
-            else {
-                alert('Add Request Successfully');
-                location.reload();
-                return response.json();
-
-
-            }
-        })
-    }
-
-
-    function addGuest() {
-        var mail = sessionStorage.getItem("mail");
-        var guest = document.getElementById('add_guests').value;
-        url = 'http://127.0.0.1:8000/api/add-guests';
-        data = { "mail": mail, 'guests': guest };
-        params = {
-            method: 'post',
-            headers: {
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        };
-        fetch(url, params).then(function (response) {
-            if (response.status == 409) {
-                alert('You already registered for Lunch');
-                location.reload();
-
-            }
-            else if (response.status == 503) {
-                alert('Its Holiday,Not able To Add Request');
-                location.reload();
-
-            }
-            else if (response.status == 401) {
-                alert('Something went wrong');
-                location.reload();
-
-            }
-            else {
-                alert('Add Request Successfully');
-                location.reload();
-                return response.json();
-            }
-        })
-
-    }
-    function deleteRequest() {
-
-        var mail = sessionStorage.getItem("mail");
-        url = 'http://127.0.0.1:8000/api/delete-request';
-        data = { "mail": mail };
-        params = {
-            method: 'post',
-            headers: {
-                'Content-type': 'application/json'
-
-            },
-            body: JSON.stringify(data)
-        };
-        fetch(url, params).then(function (response) {
-            if (response.status == 503) {
-                alert('Its Holiday,Not able To Add Request');
-                location.reload();
-
-            }
-            else if (response.status == 404) {
-                alert('You are not registered for lunch');
-                location.reload();
-
-            }
-            else {
-                alert('Delete Request Successfully');
-                location.reload();
-                return response.json();
-            }
-        })
-
-    }
-    function arriveLunch() {
-        var mail = sessionStorage.getItem("mail");
-        url = 'http://127.0.0.1:8000/api/lunch-taken';
-        data = { "mail": mail };
-        params = {
-            method: 'post',
-            headers: {
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        };
-        fetch(url, params).then(function (response) {
-            if (response.status == 503) {
-                alert('Not able To Take Lunch');
-                location.reload();
-
-            }
-            else if (response.status == 404) {
-                alert('You Already Taken Lunch');
-                location.reload();
-
-            }
-            else {
-                alert('Successfully Taken Lunch');
-                location.reload();
-                return response.json();
-            }
-        })
-
-    }
-
-    function logout() {
-
-        var mail = sessionStorage.getItem("mail");
-        // alert(mail);
-        url = 'http://localhost:8000/api/signout';
-        data = { "mail": mail };
-
-        params = {
-            method: 'post',
-            headers: {
-                'Content-type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            },
-            body: JSON.stringify(data)
-        };
-
-        fetch(url, params).then(function (response) {
-            if (response.status == 200) {
-                sessionStorage.removeItem("mail");
-                sessionStorage.removeItem("name");
-                window.location.href = "http://localhost:5500/login.html";
-                alert('You are Successfully Logout');
-
-            }
-            else if (response.status == 404) {
-                alert('Something went wrong');
-
-            }
-            else {
-                alert('Delete Request Successfully');
-                return response.json();
-            }
         });
 
+        var mail = window.sessionStorage.getItem("mail");
+        var token = window.sessionStorage.getItem("token");
+        url = 'http://127.0.0.1:8000/api/off-day';
+        data = { "mail": mail, "token": token };
+        params = {
+            method: 'post',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        };
+        fetch(url, params)
+            .then((response) => {
+                return response.json();
+            }).then((data) => {
+                weekend_date = '';
+                for (i = 0; i < data.length; i++) {
+                    weekend_date = weekend_date + data[i].weekend + ',';
+                }
 
+                localStorage.setItem('date', weekend_date);
+                disable_arrive_button();            //disable arrive button on weekend
+            })
+
+        //enable arrive button between 12:30 to 14:30
+        enable_arrive_button();
+       
     }
-
-
-
+ 
+  
 </script>
 
 <body>
@@ -305,12 +116,10 @@
                         <a class="nav-link active" aria-current="page" href="#">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="offDay.html" style="cursor:pointer;">Off-Day</a>
+                        <a class="nav-link" href="offDay.html" style="cursor:pointer;">Off-Days</a>
                     </li>
                 </ul>
-
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-
                     <li class="nav-item mt-1 me-1" id="myname">
                         Welcome,<script>document.write(window.sessionStorage.getItem('name'));</script>
                     </li>
@@ -319,7 +128,8 @@
             </div>
         </div>
     </nav>
-
+    <div class="off_day_heading" id="off_day_heading">
+    </div>
 
 
 
@@ -329,28 +139,29 @@
         </div>
         <br>
         <div class="request-heading">
-            <h2>Request For Lunch</h2>
+            <h2>Your Lunch</h2>
         </div>
         <hr>
-        <div class="request-button">
-            <button class="btn btn-primary" onclick="addRequest()" style="width: 70%;" id="add_request">Add
+        <!-- <div class="request-button">
+            <button class="btn btn-primary" disabled onclick="addRequest()" style="width: 70%;" id="add_request">Add
                 Request</button>
         </div>
         <div class="request-button">
-            <button class="btn btn-primary" onclick="openGuest()" style="width: 70%;" id="guest_request">Request with
+            <button class="btn btn-primary" disabled onclick="openGuest()" style="width: 70%;"
+                id="guest_request">Request with
                 guests</button>
         </div>
         <div class="request-button">
             <button class="btn btn-primary" onclick="deleteRequest()" style="width: 70%;" id="delete_request">Delete
                 Request</button>
-        </div>
+        </div> -->
         <div class="request-button">
-            <button class="btn btn-primary" disabled style="width: 70%;" id="arrive_lunch"
+            <button class="btn btn-primary" style="width: 70%;" id="arrive_lunch"
                 onclick="arriveLunch()">Arrive for
                 Lunch</button>
         </div>
     </div>
-    <div class="popup" id="popup">
+    <!-- <div class="popup" id="popup">
         <div class="popup-content">
             <a href=""><img src="images/close_button.png" class="close" alt="close"></a>
             <img src="images/add_guests.png" height="70px" width="70px" alt="guests">
@@ -368,5 +179,7 @@
             </div>
         </div>
     </div>
+    </div> -->
 </body>
+
 </html>
