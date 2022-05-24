@@ -1,19 +1,6 @@
-
-function openGuest() {
-    document.querySelector('.popup').style.display = "flex";
-};
-
-var e1 = document.querySelector(".close");
-
-if (e1) {
-    e1.addEventListener("click", function () {
-        document.getElementById('popup').style.display = "none";
-    });
-}
-
 function logout() {
 
-    var mail = sessionStorage.getItem("mail");
+    var user_id = sessionStorage.getItem("user_id");
     url = 'http://localhost:8000/api/signout';
     data = { "user_id": user_id };
 
@@ -34,24 +21,16 @@ function logout() {
             alert('You are Successfully Logout');
 
         }
-        else if (response.status == 404) {
+        else  {
             alert('Something went wrong');
 
-        }
-        else {
-            alert('Delete Request Successfully');
-            return response.json();
-        }
+        }       
     });
-
-
 }
-
-
 
 function offDay() {
 
-    var mail = sessionStorage.getItem("user_id");
+    var user_id = sessionStorage.getItem("user_id");
     var token = sessionStorage.getItem("token");
 
     url = 'http://127.0.0.1:8000/api/off-day';
@@ -76,12 +55,3 @@ function offDay() {
             weekend(date);
         })
 }
-
-
-
-
-
-
-
-
-
