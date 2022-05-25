@@ -20,22 +20,19 @@
         crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@5.11.0/main.min.js"></script>
     <script src="script.js"></script>
-    <title></title>
+    <title>Loading</title>
 </head>
 <script>
 
-
     window.onload = function () {
-        document.title = 'Welcome, ' + sessionStorage.getItem('name');
+
         let paramString = (window.location.href).substring(
             (window.location.href).indexOf("?code") + 1,
             (window.location.href).lastIndexOf("&state")
         );
-
         let queryString = new URLSearchParams(paramString);
         sessionStorage.setItem("code", queryString);
         url = 'http://localhost:8000/api/getdata';
-
         data = {
             "code": sessionStorage.getItem("code").substring(5),
             "grant_type": "authorization_code",
@@ -46,12 +43,14 @@
         };
         params = {
             method: 'post',
+            redirect: 'follow',
             headers: {
                 'Content-type': 'application/json',
                 'Access-Control-Allow-Origin': '*'
             },
             body: JSON.stringify(data)
         };
+
         fetch(url, params).then(function (response) {
 
             return response.json();
@@ -61,99 +60,17 @@
             var name = data.user.name;
             var user_id = data.user.id;
             var mail = data.user.mail;
-
             var token = data.user.remember_token;
+
             window.sessionStorage.setItem('mail', mail);
             window.sessionStorage.setItem('user_id', user_id);
             window.sessionStorage.setItem('token', token);
             window.sessionStorage.setItem('name', name);
-            window.location.href = "http://localhost/lunch_booking_system/index.html";
+            window.location.href = "http://localhost/lunch_booking_system/welcome.html";
 
         });
-       
-        // var mail = window.sessionStorage.getItem("mail");
-        var user_id = window.sessionStorage.getItem("user_id");
-        var token = window.sessionStorage.getItem("token");
-        url = 'http://127.0.0.1:8000/api/off-day';
-        data = { "user_id": user_id, "token": token };
-        params = {
-            method: 'post',
-            headers: {
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        };
-        fetch(url, params)
-            .then((response) => {
-                return response.json();
-            }).then((data) => {
-                weekend_date = '';
-                for (i = 0; i < data.length; i++) {
-                    weekend_date = weekend_date + data[i].weekend + ',';
-                }
-
-                localStorage.setItem('date', weekend_date);
-                disable_arrive_button();            //disable arrive button on weekend
-            })
-
-        //enable arrive button between 12:30 to 14:30
-        enable_arrive_button();
-       
     }
- 
-  
+
 </script>
-
-<body>
-
-    <!-- Navigation bar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Lunch Booking</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="offDay.html" style="cursor:pointer;">Off-Days</a>
-                    </li>
-                </ul>
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <li class="nav-item mt-1 me-1" id="myname">
-                        Welcome,<script>document.write(window.sessionStorage.getItem('name'));</script>
-                    </li>
-                    <button class="btn btn-success" onclick="logout()">Logout</button>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <div class="off_day_heading" id="off_day_heading">
-    </div>
-
-
-
-    <div class="container">
-        <div class="image">
-            <img src="images/simform_logo.png" class="img-fluid" alt="Responsive image">
-        </div>
-        <br>
-        <div class="request-heading">
-            <h2>Your Lunch</h2>
-        </div>
-        <hr>
-
-        <div class="request-button">
-            <button class="btn btn-primary" style="width: 70%;" id="arrive_lunch"
-                onclick="arriveLunch()">Arrive for
-                Lunch</button>
-        </div>
-    </div>
-</body>
 
 </html>

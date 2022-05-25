@@ -23,21 +23,22 @@
 <script>
 
     function checkLogin() {
+
         fetch("http://localhost:8000/api/signin", {
 
-            // Adding method type
             method: "POST",
-            // Adding headers to the request
             headers: {
                 "Content-type": "application/json; charset=UTF-8"
             }
         })
-            // Converting to JSON
             .then(response => response.json())
             .then(function (data) {
-
-                window.location.href = data.link;
-
+                
+                if (window.sessionStorage.getItem('code') !== null && window.sessionStorage.getItem('code') !== '' && window.sessionStorage.getItem('code') !== undefined) {
+                    window.location.href = "http://localhost/lunch_booking_system/welcome.html";
+                } else {
+                    window.location.href = data.link;
+                }
             });
     }
 </script>
