@@ -119,12 +119,13 @@ function disable_arrive_button() {
   for (var i = 0; i <= dateArray.length; i++) {
     if (dateArray[i] == tommorowFormatDate) {
       document.getElementById('off_day_heading').innerHTML =
-        'Tomorrow is Off-Day!!!'
-      break
+        'Tomorrow is Off-Day!!!';
+     
     } else if (dateArray[i] == formatDate) {
-      document.getElementById('arrive_lunch').disabled = true
+      document.getElementById('arrive_lunch').disabled = true;
       document.getElementById('off_day_heading').innerHTML =
-        'Today is Off-Day!!!'
+        'Today is Off-Day!!!';
+        break;
     }
   }
 }
@@ -134,14 +135,19 @@ function enable_arrive_button() {
   let h = t.getHours()
   let m = t.getMinutes()
   if (h >= 12 && h < 15) {
-    if ((h == 12 && m >= 30) || h == 13) {
-      document.getElementById('arrive_lunch').disabled = false
-    } else if (m <= 30 && h == 14) {
-      document.getElementById('arrive_lunch').disabled = false
-    } else {
-      document.getElementById('arrive_lunch').disabled = true
-    }
-  } else {
-    document.getElementById('arrive_lunch').disabled = true
+      if ((h == 12 && m >= 30) || h == 13) {
+          document.getElementById('arrive_lunch').disabled = false;
+      }
+      else if (m <= 30 && h == 14) {
+          document.getElementById('arrive_lunch').disabled = false;
+      }
+      else {
+          document.getElementById('arrive_lunch').disabled = true;
+      }
   }
+  else{
+      document.getElementById('arrive_lunch').disabled = true;
+
+  }
+
 }
