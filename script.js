@@ -1,5 +1,6 @@
+//logout
 function logout() {
-  var user_id = sessionStorage.getItem('user_id')
+    var user_id = sessionStorage.getItem('user_id')
   var token = sessionStorage.getItem('token')
   url = 'http://127.0.0.1:8000/api/signout'
   data = { user_id: user_id, token: token }
@@ -33,6 +34,7 @@ function logout() {
   })
 }
 
+//shows offdays
 function offDay() {
   var user_id = sessionStorage.getItem('user_id')
   var token = sessionStorage.getItem('token')
