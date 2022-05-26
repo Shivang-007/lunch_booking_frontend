@@ -25,6 +25,7 @@
 
         var mail = sessionStorage.getItem("mail");
        
+        // alert(mail);
         url = 'http://localhost:8000/api/signout';
         data = { "mail": mail };
 
@@ -48,11 +49,13 @@
             else if (response.status == 404) {
                 alert('Something went wrong');
               
+                //enableButton();
 
             }
             else {
                 alert('Delete Request Successfully');
               
+                //enableButton();
                 return response.json();
             }
         });
@@ -110,6 +113,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" onclick="offDay()">Off-Day</a>
+                        <a class="nav-link" onclick="offDay()" style="cursor:pointer;">Off-Day</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">

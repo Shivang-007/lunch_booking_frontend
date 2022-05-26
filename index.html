@@ -22,7 +22,31 @@
 </head>
 <script>
 
+    window.onload = function () {
 
+        const t = new Date();
+        h = t.getHours();
+        m = t.getMinutes();
+        if (h >= 12 && h < 15) {
+            if ((h == 12 && m >= 30) || h == 13) {
+                document.getElementById('arrive_lunch').disabled = false;
+            }
+            else if (m <= 30 && h == 14) {
+                document.getElementById('arrive_lunch').disabled = false;
+            }
+            else {
+                document.getElementById('arrive_lunch').disabled = true;
+            }
+        }
+        if ((h > 14 && m == 30) && (h < 21)) {
+            document.getElementById('guest_request').disabled = false;
+            document.getElementById('add_request').disabled = false;
+        }
+        else {
+            document.getElementById('add_request').disabled = true;
+            document.getElementById('guest_request').disabled = true;
+          
+        }
 
     window.onload = function () {
 
@@ -81,6 +105,49 @@
 
             else {
                 document.getElementById('arrive_lunch').disabled = true;
+
+
+
+        dateString = sessionStorage.getItem('date');
+
+        var d = new Date(),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+
+        if (month.length < 2) {
+            month = '0' + month;
+        }
+        if (day.length < 2) {
+            day = '0' + day;
+        }
+        formatDate = [year, month, day].join('-');
+        dateArray = dateString.split(",");
+        for (var i = 0; i < dateArray.length; i++) {
+            if (dateArray[i] == formatDate) {
+
+                document.getElementById("arrive_lunch").disabled = true;
+            }
+        }
+
+
+    };
+
+    function addRequest() {
+        var mail = window.sessionStorage.getItem("mail");
+        url = 'http://127.0.0.1:8000/api/add-request';
+        data = { "mail": mail };
+        params = {
+            method: 'post',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        };
+        fetch(url, params).then(function (response) {
+            if (response.status == 409) {
+                alert('You already registered for Lunch');
+                location.reload();
             }
         }
 
@@ -90,6 +157,15 @@
 
         // if (hour >= 12 && hour <= 21) {
 
+            }
+            else if (response.status == 404) {
+                alert('Something went wrong');
+                location.reload();
+            }
+            else {
+                alert('Add Request Successfully');
+                location.reload();
+                return response.json();
 
         //     document.getElementById('add_request').disabled = false;
         //     document.getElementById('guest_request').disabled = false;
@@ -100,6 +176,9 @@
         // }
 
 
+            }
+        })
+    }
 
         var disdate = sessionStorage.getItem('date');
         dateArray = disdate.split(",");
@@ -325,6 +404,7 @@
        
         var mail = sessionStorage.getItem("mail");
         var token = sessionStorage.getItem("token");
+        // alert(mail);
         url = 'http://127.0.0.1:8000/api/off-day';
         data = { "mail": mail, "token": token };
         params = {
@@ -344,6 +424,9 @@
 
             }).then((data) => {
                 
+
+            }).then((data) => {
+                // console.log(data);
                 date = '';
                 for (i = 0; i < data[0].length; i++) {
                     date = date + data[0][i].weekend + ',';
@@ -351,6 +434,11 @@
                 
                 sessionStorage.setItem('date', date);
                
+
+                //    alert(date);
+                //     console.log(date);
+                sessionStorage.setItem('date', date);
+                // alert(sessionStorage.getItem('date'));
             });
 
     }
@@ -376,6 +464,7 @@
                     <li class="nav-item">
                         <a class="nav-link" style="cursor: pointer;" onclick="offDay()">Off-Day</a>
 
+                        <a class="nav-link" onclick="offDay()" style="cursor:pointer;">Off-Day</a>
                     </li>
                 </ul>
 
@@ -384,6 +473,7 @@
                     <li class="nav-item mt-1 me-1" id="myname">
                         Welcome,
                         <script>document.write(window.sessionStorage.getItem('name'));</script>
+                        Welcome,<script>document.write(window.sessionStorage.getItem('name'));</script>
                     </li>
                     <button class="btn btn-success" onclick="logout()">Logout</button>
                 </ul>
