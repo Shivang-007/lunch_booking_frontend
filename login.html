@@ -21,13 +21,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <script>
-    // window.onload = function () {
-    //     if (sessionStorage.getItem("user_id")) {
-    //         window.location.href = "http://localhost:5500/index.html";
-    //     }
-
-
-    // }
+  
 
     function checkLogin() {
         fetch("http://localhost:8000/api/signin", {
@@ -59,10 +53,14 @@
         </div>
         <br>
 
-        <h2 class="login-heading">Login</h2>
+        <h2 class="login-heading">Login Using Outlook</h2>
 
         <hr>
         <form>
+            <div class="login-button" >
+                
+                <button type="button" id="login-btn"  onclick="checkLogin()" class="btn btn-primary"><img src="images/outlook_dark.png" alt="outlook" style="float: left;" width="25px" height="22px">Login Using Outlook</button>
+
             <div class="login-button">
                 
                 <button type="button" onclick="checkLogin()" id="login-btn" class="btn btn-primary"><img src="images/outlook_dark.png" alt="outlook" style="float: left;" width="25px" height="22px">Login Using Outlook</button>
