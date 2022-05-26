@@ -1,5 +1,3 @@
-
-
 function logout() {
 
     var user_id = sessionStorage.getItem("user_id");
@@ -23,13 +21,11 @@ function logout() {
             alert('You are Successfully Logout');
             window.location.href = "http://localhost/lunch_booking_system/login.html";
         }
-        else if (response.status == 404) {
+        else  {
             alert('Something went wrong');
         }
     });
 }
-
-  
 
 function offDay() {
 
@@ -63,8 +59,6 @@ function offDay() {
         })
 }
 
-
-
 function arriveLunch() {
 
     var user_id = sessionStorage.getItem("user_id");
@@ -95,7 +89,6 @@ function arriveLunch() {
         }
     })
 }
-
 
 function disable_arrive_button()
    {
@@ -128,7 +121,7 @@ function disable_arrive_button()
         }
    }
 
-   function  enable_arrive_button(){
+function  enable_arrive_button(){
     const t = new Date();
     let h = t.getHours();
     let m = t.getMinutes();
@@ -145,165 +138,3 @@ function disable_arrive_button()
     }      
 }
 
-
-
-
-// function addRequest() {
-    //     var mail = window.sessionStorage.getItem("mail");
-    //     var token = sessionStorage.getItem("token");
-    //     // alert(token);
-    //     url = 'http://127.0.0.1:8000/api/add-request';
-    //     data = { "mail": mail, "token": token };
-    //     params = {
-    //         method: 'post',
-    //         headers: {
-    //             'Content-type': 'application/json'
-    //         },
-    //         body: JSON.stringify(data)
-    //     };
-    //     fetch(url, params).then(function (response) {
-    //         if (response.status == 409) {
-    //             alert('You already registered for Lunch');
-    //             location.reload();
-    //         }
-    //         else if (response.status == 503) {
-    //             alert('Its Holiday,Not able To Add Request');
-    //             location.reload();
-
-    //         }
-    //         else if (response.status == 404) {
-    //             alert('Something went wrong');
-    //             location.reload();
-    //         }
-    //         else {
-    //             alert('Add Request Successfully');
-    //             location.reload();
-    //             return response.json();
-
-
-    //         }
-    //     })
-    // }
-
-
-    // function addGuest() {
-    //     var mail = sessionStorage.getItem("mail");
-    //     var token = sessionStorage.getItem("token");
-    //     var guest = document.getElementById('add_guests').value;
-    //     url = 'http://127.0.0.1:8000/api/add-guests';
-    //     data = { "mail": mail, 'guests': guest, "token": token };
-    //     params = {
-    //         method: 'post',
-    //         headers: {
-    //             'Content-type': 'application/json'
-    //         },
-    //         body: JSON.stringify(data)
-    //     };
-    //     fetch(url, params).then(function (response) {
-    //         if (response.status == 409) {
-    //             alert('You already registered for Lunch');
-    //             location.reload();
-
-    //         }
-    //         else if (response.status == 503) {
-    //             alert('Its Holiday,Not able To Add Request');
-    //             location.reload();
-
-    //         }
-    //         else if (response.status == 401) {
-    //             alert('Something went wrong');
-    //             location.reload();
-
-    //         }
-    //         else {
-    //             alert('Add Request Successfully');
-    //             location.reload();
-    //             return response.json();
-    //         }
-    //     })
-
-    // }
-    // function deleteRequest() {
-
-    //     var mail = sessionStorage.getItem("mail");
-    //     var token = sessionStorage.getItem("token");
-    //     url = 'http://127.0.0.1:8000/api/delete-request';
-    //     data = { "mail": mail, "token": token };
-    //     params = {
-    //         method: 'post',
-    //         headers: {
-    //             'Content-type': 'application/json'
-
-    //         },
-    //         body: JSON.stringify(data)
-    //     };
-    //     fetch(url, params).then(function (response) {
-    //         if (response.status == 503) {
-    //             alert('Its Holiday,Not able To Add Request');
-    //             location.reload();
-
-    //         }
-    //         else if (response.status == 404) {
-    //             alert('You are not registered for lunch');
-    //             location.reload();
-
-    //         }
-    //         else {
-    //             alert('Delete Request Successfully');
-    //             location.reload();
-    //             return response.json();
-    //         }
-    //     })
-
-    // }
-    
-
-
-        // const date = new Date();
-        // let hour = date.getHours();
-        // let minutes = date.getMinutes();
-
-        // if (hour >= 12 && hour <= 21) {
-
-
-        //     document.getElementById('add_request').disabled = false;
-        //     document.getElementById('guest_request').disabled = false;
-        // }
-        // else {
-        //     document.getElementById('add_request').disabled = true;
-        //     document.getElementById('guest_request').disabled = true;
-        // }
-
-
-
-
-         // const d = new Date();
-        // let h = d.getHours();
-        // let m = d.getMinutes();
-        // if (h >= 12 && h < 15) {
-        //     if ((h == 12 && m >= 30) || h == 13) {
-        //         document.getElementById('arrive_lunch').disabled = false;
-        //     }
-        //     else if (m <= 30 && h == 14) {
-        //         document.getElementById('arrive_lunch').disabled = false;
-        //     }
-
-
-        //     else {
-        //         document.getElementById('arrive_lunch').disabled = true;
-        //     }
-        // }
-
-
-        // function openGuest() {
-        //     document.querySelector('.popup').style.display = "flex";
-        // };
-        
-        // var e1 = document.querySelector(".close");
-        
-        // if (e1) {
-        //     e1.addEventListener("click", function () {
-        //         document.getElementById('popup').style.display = "none";
-        //     });
-        // }
-        
