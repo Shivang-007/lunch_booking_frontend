@@ -80,7 +80,7 @@ function arriveLunch() {
   }
   fetch(url, params).then(function (response) {
     if (response.status == 409) {
-      alert('You already registered for Lunch')
+      alert('You already taken Lunch')
       location.reload()
     } else if (response.status == 404) {
       alert('Something went wrong')
@@ -89,7 +89,7 @@ function arriveLunch() {
       alert('You are Unauthorized')
       location.reload()
     } else {
-      alert('Lunch Taken')
+      alert('Enjoy your Lunch!')
       location.reload()
       return response.json()
     }
