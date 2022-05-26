@@ -21,27 +21,31 @@
     <title>Document</title>
 </head>
 <script>
-    // window.onload = function() {
-    //   if(sessionStorage.getItem("mail")){
-    //   }
-    //   else{
-    //     window.location.href = "http://localhost:5500/login.html";
-    //   }
-
-    // }
     window.onload = function () {
-        
-        // const d = new Date();
-        // hour = d.getHours();
-        // minutes = d.getMinutes();
-        // if(hour>=12 && hour<14 && minutes<=30)
-        // {
-        //     document.getElementById("arrive_lunch").disabled = false;
-        // }
-        // if(hour>=21 && hour<2 && minutes>=30 )
-        // {
-        //     document.getElementById("add_request").disabled = true;
-        // }
+
+        const t = new Date();
+        h = t.getHours();
+        m = t.getMinutes();
+        if (h >= 12 && h < 15) {
+            if ((h == 12 && m >= 30) || h == 13) {
+                document.getElementById('arrive_lunch').disabled = false;
+            }
+            else if (m <= 30 && h == 14) {
+                document.getElementById('arrive_lunch').disabled = false;
+            }
+            else {
+                document.getElementById('arrive_lunch').disabled = true;
+            }
+        }
+        if ((h > 14 && m == 30) && (h < 21)) {
+            document.getElementById('guest_request').disabled = false;
+            document.getElementById('add_request').disabled = false;
+        }
+        else {
+            document.getElementById('add_request').disabled = true;
+            document.getElementById('guest_request').disabled = true;
+          
+        }
 
         let paramString = (window.location.href).substring(
             (window.location.href).indexOf("?code") + 1,
@@ -86,14 +90,33 @@
             //  document.getElementById("myname").innerHTML= window.sessionStorage.getItem('name');
             window.location.href = 'http://localhost:5500/index.html';
         })
+
+
+        dateString = sessionStorage.getItem('date');
+
+        var d = new Date(),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+
+        if (month.length < 2) {
+            month = '0' + month;
+        }
+        if (day.length < 2) {
+            day = '0' + day;
+        }
+        formatDate = [year, month, day].join('-');
+        dateArray = dateString.split(",");
+        for (var i = 0; i < dateArray.length; i++) {
+            if (dateArray[i] == formatDate) {
+
+                document.getElementById("arrive_lunch").disabled = true;
+            }
+        }
+
+
     };
 
-    // window.onload = function () {
-    //     if (!sessionStorage.getItem("mail")) {
-    //         window.location.href = "http://localhost:5500/login.html";
-    //     }
-
-    // }
     function addRequest() {
         var mail = window.sessionStorage.getItem("mail");
         url = 'http://127.0.0.1:8000/api/add-request';
@@ -121,7 +144,7 @@
             }
             else {
                 alert('Add Request Successfully');
-                 location.reload();
+                location.reload();
                 return response.json();
 
 
@@ -274,7 +297,7 @@
 
     }
     function offDay() {
-        
+
         var mail = sessionStorage.getItem("mail");
         // alert(mail);
         url = 'http://127.0.0.1:8000/api/off-day';
@@ -284,23 +307,24 @@
             headers: {
                 'Content-type': 'application/json'
             },
-             body: JSON.stringify(data)
+            body: JSON.stringify(data)
         };
-        fetch(url,params)
+        fetch(url, params)
             .then((response) => {
                 window.location.href = 'http://localhost:5500/offDay.html';
                 return response.json();
-              
-              
+
+
             }).then((data) => {
-               // console.log(data);
+                // console.log(data);
                 date = '';
                 for (i = 0; i < data[0].length; i++) {
                     date = date + data[0][i].weekend + ',';
                 }
-            //    alert(date);
-            //     console.log(date);
+                //    alert(date);
+                //     console.log(date);
                 sessionStorage.setItem('date', date);
+                // alert(sessionStorage.getItem('date'));
             });
 
     }
@@ -363,7 +387,8 @@
                 Request</button>
         </div>
         <div class="request-button">
-            <button class="btn btn-primary"  style="width: 70%;" id="arrive_lunch" onclick="arriveLunch()">Arrive for
+            <button class="btn btn-primary" disabled style="width: 70%;" id="arrive_lunch"
+                onclick="arriveLunch()">Arrive for
                 Lunch</button>
         </div>
     </div>
