@@ -20,10 +20,9 @@
         crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@5.11.0/main.min.js"></script>
     <script src="script.js"></script>
-    <title></title>
+    <title>Loading</title>
 </head>
 <script>
-
 
     window.onload = function () {
         document.title = 'Welcome, ' + sessionStorage.getItem('name');
@@ -34,13 +33,11 @@
             (window.location.href).indexOf("?code") + 1,
             (window.location.href).lastIndexOf("&state")
         );
-
         let queryString = new URLSearchParams(paramString);
         sessionStorage.setItem("code", queryString);
 
 
         url = 'http://localhost:8000/api/getdata';
-
         data = {
             "code": sessionStorage.getItem("code").substring(5),
             "grant_type": "authorization_code",
@@ -51,6 +48,7 @@
         };
         params = {
             method: 'post',
+            redirect: 'follow',
             headers: {
                 'Content-type': 'application/json',
                 'Access-Control-Allow-Origin': '*'
@@ -67,15 +65,18 @@
             var name = data.user.name;
             var user_id = data.user.id;
             var mail = data.user.mail;
-
             var token = data.user.remember_token;
+
             window.sessionStorage.setItem('mail', mail);
             window.sessionStorage.setItem('user_id', user_id);
             window.sessionStorage.setItem('token', token);
             window.sessionStorage.setItem('name', name);
-            window.location.href = "http://localhost/lunch_booking_system/index.html";
+            window.location.href = "http://localhost/lunch_booking_system/welcome.html";
 
         });
+    }
+
+</script>
        
         // var mail = window.sessionStorage.getItem("mail");
         var user_id = window.sessionStorage.getItem("user_id");
