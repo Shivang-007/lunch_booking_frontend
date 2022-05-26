@@ -1,21 +1,309 @@
 
 
+function logout() {
 
+    var user_id = sessionStorage.getItem("user_id");
+    var token = sessionStorage.getItem("token");
+    url = 'http://127.0.0.1:8000/api/off-day';
+    data = { "user_id": user_id, "token": token };
 
-// document. getElementById("delete_request").style.display = "none";
-// document. getElementById("arrive_lunch").style.display = "none";
+    params = {
+        method: 'post',
+        headers: {
+            'Content-type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+        },
+        body: JSON.stringify(data)
+    };
 
-function openGuest() {
-    document.querySelector('.popup').style.display = "flex";
-};
+    fetch(url, params).then(function (response) {
+        if (response.status == 200) {
+            sessionStorage.removeItem("user_id");
+            sessionStorage.removeItem("name");
+            alert('You are Successfully Logout');
+            window.location.href = "http://localhost/lunch_booking_system/login.html";
+        }
+        else if (response.status == 404) {
+            alert('Something went wrong');
+        }
+    });
+}
 
-var e1 = document.querySelector(".close");
+  
 
-if(e1){
-    e1.addEventListener("click", function () {
-        document.getElementById('popup').style.display = "none";     
-});
+function offDay() {
+
+    var user_id = sessionStorage.getItem("user_id");
+    var token = sessionStorage.getItem("token");
+    url = 'http://127.0.0.1:8000/api/off-day';
+    data = { "user_id": user_id, "token": token };
+    params = {
+        method: 'post',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    };
+    fetch(url, params)
+        .then((response) => {
+            return response.json();
+        }).then((data) => {
+            date = data.map(obj => {
+                return {
+                    title: 'off-day',
+                    start: obj.weekend,
+                }
+            });
+            weekend(date);
+            weekend_date = '';
+            for (i = 0; i < data.length; i++) {
+                weekend_date = weekend_date + data[i].weekend + ',';
+            }
+            localStorage.setItem('date', weekend_date);
+        })
 }
 
 
 
+function arriveLunch() {
+
+    var user_id = sessionStorage.getItem("user_id");
+    var token = window.sessionStorage.getItem("token");
+
+    url = 'http://127.0.0.1:8000/api/lunch-taken';
+    data = { "user_id": user_id, "token": token };
+    params = {
+        method: 'post',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    };
+    fetch(url, params).then(function (response) {
+        if (response.status == 409) {
+            alert('You already registered for Lunch');
+            location.reload();
+        }
+        else if (response.status == 404) {
+            alert('Something went wrong');
+            location.reload();
+        }
+        else {
+            alert('Lunch Taken');
+            location.reload();
+            return response.json();
+        }
+    })
+}
+
+
+function disable_arrive_button()
+   {
+    var today = new Date(),
+            month = '' + (today.getMonth() + 1),
+            day = '' + today.getDate(),
+            tommorowDay = '' + (today.getDate() + 1),
+            year = today.getFullYear();
+
+        if (month.length < 2) {
+            month = '0' + month;
+        }
+        if (day.length < 2) {
+            day = '0' + day;
+        }
+        if (tommorowDay.length < 2) {
+            tommorowDay = '0' + tommorowDay;
+        }
+        formatDate = [year, month, day].join('-');
+        tommorowFormatDate = [year, month, tommorowDay].join('-');
+        dateString = localStorage.getItem('date');
+        dateArray = dateString.split(",");
+        for (var i = 0; i <= dateArray.length; i++) {
+            if (dateArray[i] == formatDate) {
+                document.getElementById("arrive_lunch").disabled = true;
+                document.getElementById("off_day_heading").innerHTML = "Today is Off-Day!!!";
+            } else if (dateArray[i] == tommorowFormatDate) {
+                document.getElementById("off_day_heading").innerHTML = "Tommorow is Off-Day!!!";
+            }
+        }
+   }
+
+   function  enable_arrive_button(){
+    const t = new Date();
+    let h = t.getHours();
+    let m = t.getMinutes();
+    if (h >= 12 && h < 15) {
+        if ((h == 12 && m >= 30) || h == 13) {
+            document.getElementById('arrive_lunch').disabled = false;
+        }
+        else if (m <= 30 && h == 14) {
+            document.getElementById('arrive_lunch').disabled = false;
+        }
+        else {
+            document.getElementById('arrive_lunch').disabled = true;
+        }
+    }      
+}
+
+
+
+
+// function addRequest() {
+    //     var mail = window.sessionStorage.getItem("mail");
+    //     var token = sessionStorage.getItem("token");
+    //     // alert(token);
+    //     url = 'http://127.0.0.1:8000/api/add-request';
+    //     data = { "mail": mail, "token": token };
+    //     params = {
+    //         method: 'post',
+    //         headers: {
+    //             'Content-type': 'application/json'
+    //         },
+    //         body: JSON.stringify(data)
+    //     };
+    //     fetch(url, params).then(function (response) {
+    //         if (response.status == 409) {
+    //             alert('You already registered for Lunch');
+    //             location.reload();
+    //         }
+    //         else if (response.status == 503) {
+    //             alert('Its Holiday,Not able To Add Request');
+    //             location.reload();
+
+    //         }
+    //         else if (response.status == 404) {
+    //             alert('Something went wrong');
+    //             location.reload();
+    //         }
+    //         else {
+    //             alert('Add Request Successfully');
+    //             location.reload();
+    //             return response.json();
+
+
+    //         }
+    //     })
+    // }
+
+
+    // function addGuest() {
+    //     var mail = sessionStorage.getItem("mail");
+    //     var token = sessionStorage.getItem("token");
+    //     var guest = document.getElementById('add_guests').value;
+    //     url = 'http://127.0.0.1:8000/api/add-guests';
+    //     data = { "mail": mail, 'guests': guest, "token": token };
+    //     params = {
+    //         method: 'post',
+    //         headers: {
+    //             'Content-type': 'application/json'
+    //         },
+    //         body: JSON.stringify(data)
+    //     };
+    //     fetch(url, params).then(function (response) {
+    //         if (response.status == 409) {
+    //             alert('You already registered for Lunch');
+    //             location.reload();
+
+    //         }
+    //         else if (response.status == 503) {
+    //             alert('Its Holiday,Not able To Add Request');
+    //             location.reload();
+
+    //         }
+    //         else if (response.status == 401) {
+    //             alert('Something went wrong');
+    //             location.reload();
+
+    //         }
+    //         else {
+    //             alert('Add Request Successfully');
+    //             location.reload();
+    //             return response.json();
+    //         }
+    //     })
+
+    // }
+    // function deleteRequest() {
+
+    //     var mail = sessionStorage.getItem("mail");
+    //     var token = sessionStorage.getItem("token");
+    //     url = 'http://127.0.0.1:8000/api/delete-request';
+    //     data = { "mail": mail, "token": token };
+    //     params = {
+    //         method: 'post',
+    //         headers: {
+    //             'Content-type': 'application/json'
+
+    //         },
+    //         body: JSON.stringify(data)
+    //     };
+    //     fetch(url, params).then(function (response) {
+    //         if (response.status == 503) {
+    //             alert('Its Holiday,Not able To Add Request');
+    //             location.reload();
+
+    //         }
+    //         else if (response.status == 404) {
+    //             alert('You are not registered for lunch');
+    //             location.reload();
+
+    //         }
+    //         else {
+    //             alert('Delete Request Successfully');
+    //             location.reload();
+    //             return response.json();
+    //         }
+    //     })
+
+    // }
+    
+
+
+        // const date = new Date();
+        // let hour = date.getHours();
+        // let minutes = date.getMinutes();
+
+        // if (hour >= 12 && hour <= 21) {
+
+
+        //     document.getElementById('add_request').disabled = false;
+        //     document.getElementById('guest_request').disabled = false;
+        // }
+        // else {
+        //     document.getElementById('add_request').disabled = true;
+        //     document.getElementById('guest_request').disabled = true;
+        // }
+
+
+
+
+         // const d = new Date();
+        // let h = d.getHours();
+        // let m = d.getMinutes();
+        // if (h >= 12 && h < 15) {
+        //     if ((h == 12 && m >= 30) || h == 13) {
+        //         document.getElementById('arrive_lunch').disabled = false;
+        //     }
+        //     else if (m <= 30 && h == 14) {
+        //         document.getElementById('arrive_lunch').disabled = false;
+        //     }
+
+
+        //     else {
+        //         document.getElementById('arrive_lunch').disabled = true;
+        //     }
+        // }
+
+
+        // function openGuest() {
+        //     document.querySelector('.popup').style.display = "flex";
+        // };
+        
+        // var e1 = document.querySelector(".close");
+        
+        // if (e1) {
+        //     e1.addEventListener("click", function () {
+        //         document.getElementById('popup').style.display = "none";
+        //     });
+        // }
+        
